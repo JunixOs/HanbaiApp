@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    Home
+    <!-- Para contruir una referencia a un metodo usamos el url_for -->
+    <!-- dentro escribimos el nombre del Blueprint y seguido el nombre de la funcion -->
+    <!-- Si el metodo viene del app.py entonces solo escribimos el nombre de la funcion -->
+    <!-- ya que se interpretara que estamos haciendo referencia a app.py -->
+    <a href="{{ url_for('users.ShowUserHome')}}">Ir a usuarios</a>
+</body>
+</html>
