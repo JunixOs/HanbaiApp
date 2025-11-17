@@ -1,0 +1,159 @@
+@startuml "Map Site - v1 - 17-11-2025"
+title Map Site - HanbaiApp
+
+' Estilo opcional para hacerlo más legible
+skinparam rectangle {
+  BackgroundColor #E6F0FF
+  BorderColor #3366CC
+  FontColor black
+  FontStyle bold
+}
+
+rectangle "Home" as View_Home
+
+rectangle "Inicio de Sesion" as View_InicioDeSesion
+rectangle "Registro de Clientes" as View_RegistroCliente
+
+rectangle "Cliente Home Page" as View_ClienteHomePage
+    rectangle "Productos" as View_ProductosCliente
+        rectangle "Carrito de Compra" as View_CarritoDeCompra
+            rectangle "Seleccion de Metodo de Pago" as View_SeleccionDeMetodoDePago
+                rectangle "Compra Exitosa" as View_CompraExitosa
+    rectangle "Categorias de Productos" as View_CategoriasDeProductosCliente
+
+    rectangle "Historial de Compras" as View_HistorialDeCompras
+        rectangle "Comprobantes de Compra" as View_ComprobantesDeCompra
+
+rectangle "Encargado de Tienda Home Page" as View_EncargadoDeTiendaHomePage
+    rectangle "Productos" as View_ProductosEncargadoDeTienda
+        rectangle "Añadir Producto" as View_AñadirProductoEncargadoDeTienda
+        rectangle "Editar Producto" as View_EditarProductoEncargadoDeTienda
+        rectangle "Eliminar Producto" as View_EliminarProductoEncargadoDeTienda
+
+    rectangle "Categorias de Productos" as View_CategoriasDeProductosEncargadoDeTienda
+        rectangle "Añadir Categoria" as View_AñadirCategoriaEncargadoDeTienda
+        rectangle "Editar Categoria" as View_EditarCategoriaEncargadoDeTienda
+        rectangle "Eliminar Categoria" as View_EliminarCategoriaEncargadoDeTienda
+    
+    rectangle "Historial de Ventas" as View_HistorialDeVentasEncargadoDeTienda
+        rectangle "Comprobantes de Venta" as View_ComprobantesDeVentaEncargadoDeTienda
+        rectangle "Anular Venta" as View_AnularVenta
+
+    rectangle "Reportes" as View_ReportesEncargadoDeTienda
+        rectangle "Generar Reporte" as View_GenerarReporteEncargadoDeTienda
+            rectangle "Seleccionar Formato del Contenido" as View_SeleccionarFormatoDelContenidoEncargadoDeTienda
+        rectangle "Exportar Reporte" as View_ExportarReporteEncargadoDeTienda
+            rectangle "Seleccionar Formato del Archivo" as View_SeleccionarFormatoDelArchivoEncargadoDeTienda
+
+rectangle "Administrador Home Page" as View_AdministradorHomePage
+    rectangle "Productos" as View_ProductosAdministrador
+        rectangle "Añadir Producto" as View_AñadirProductoAdministrador
+        rectangle "Editar Producto" as View_EditarProductoAdministrador
+        rectangle "Eliminar Producto" as View_EliminarProductoAdministrador
+    
+    rectangle "Categorias de Productos" as View_CategoriasDeProductosAdministrador
+        rectangle "Añadir Categoria" as View_AñadirCategoriaAdministrador
+        rectangle "Editar Categoria" as View_EditarCategoriaAdministrador
+        rectangle "Eliminar Categoria" as View_EliminarCategoriaAdministrador
+    
+    rectangle "Usuarios Registrados" as View_UsuariosRegistrados
+        rectangle "Crear Usuario" as View_CrearUsuario
+        rectangle "Editar Usuario" as View_EditarUsuario
+        rectangle "Eliminar Usuario" as View_EliminarUsuario
+
+    rectangle "Roles Registrados" as View_RolesRegistrados
+        rectangle "Crear Rol" as View_CrearRol
+        rectangle "Editar Rol" as View_EditarRol
+        rectangle "Eliminar Rol" as View_EliminarRol
+
+    rectangle "Reportes" as View_ReportesAdministrador
+        rectangle "Generar Reporte" as View_GenerarReporteAdministrador
+            rectangle "Seleccionar Formato del Contenido" as View_SeleccionarFormatoDelContenidoAdministrador
+        rectangle "Exportar Reporte" as View_ExportarReporteAdministrador
+            rectangle "Seleccionar Formato del Archivo" as View_SeleccionarFormatoDelArchivoAdministrador
+
+
+rectangle "Sobre Nosotros" as View_SobreNosotros
+
+    rectangle "Equipo" as View_Equipo
+    rectangle "Visión" as View_Vision
+    rectangle "Misión" as View_Mision
+
+rectangle "Soporte Técnico" as View_SoporteTecnico
+
+' Subpáginas de Contacto
+
+View_Home -down-> View_InicioDeSesion
+    View_InicioDeSesion -down-> View_ClienteHomePage
+        View_ClienteHomePage -down-> View_ProductosCliente
+            View_ProductosCliente -down-> View_CarritoDeCompra
+                View_CarritoDeCompra -down-> View_SeleccionDeMetodoDePago
+                    View_SeleccionDeMetodoDePago -down-> View_CompraExitosa
+        
+        View_ClienteHomePage -down-> View_CategoriasDeProductosCliente
+
+        View_ClienteHomePage -down-> View_HistorialDeCompras
+            View_HistorialDeCompras -down-> View_ComprobantesDeCompra
+
+
+    View_InicioDeSesion -down-> View_EncargadoDeTiendaHomePage
+        View_EncargadoDeTiendaHomePage -down-> View_ProductosEncargadoDeTienda
+            View_ProductosEncargadoDeTienda -down-> View_AñadirProductoEncargadoDeTienda
+            View_ProductosEncargadoDeTienda -down-> View_EditarProductoEncargadoDeTienda
+            View_ProductosEncargadoDeTienda -down-> View_EliminarProductoEncargadoDeTienda
+        
+        View_EncargadoDeTiendaHomePage -down-> View_HistorialDeVentasEncargadoDeTienda
+            View_HistorialDeVentasEncargadoDeTienda -down-> View_ComprobantesDeVentaEncargadoDeTienda
+            View_HistorialDeVentasEncargadoDeTienda -down-> View_AnularVenta
+        
+        View_EncargadoDeTiendaHomePage -down-> View_CategoriasDeProductosEncargadoDeTienda
+            View_CategoriasDeProductosEncargadoDeTienda -down-> View_AñadirCategoriaEncargadoDeTienda
+            View_CategoriasDeProductosEncargadoDeTienda -down-> View_EditarCategoriaEncargadoDeTienda
+            View_CategoriasDeProductosEncargadoDeTienda -down-> View_EliminarCategoriaEncargadoDeTienda
+
+        View_EncargadoDeTiendaHomePage -down-> View_ReportesEncargadoDeTienda
+            View_ReportesEncargadoDeTienda -down-> View_GenerarReporteEncargadoDeTienda
+                View_GenerarReporteEncargadoDeTienda -down-> View_SeleccionarFormatoDelContenidoEncargadoDeTienda
+            View_ReportesEncargadoDeTienda -down-> View_ExportarReporteEncargadoDeTienda
+                View_ExportarReporteEncargadoDeTienda -down-> View_SeleccionarFormatoDelArchivoEncargadoDeTienda
+
+
+    View_InicioDeSesion -down-> View_AdministradorHomePage
+        View_AdministradorHomePage -down-> View_ProductosAdministrador
+            View_ProductosAdministrador -down-> View_AñadirProductoAdministrador
+            View_ProductosAdministrador -down-> View_EditarProductoAdministrador
+            View_ProductosAdministrador -down-> View_EliminarProductoAdministrador
+
+        View_AdministradorHomePage -down-> View_CategoriasDeProductosAdministrador
+            View_CategoriasDeProductosAdministrador -down-> View_AñadirCategoriaAdministrador
+            View_CategoriasDeProductosAdministrador -down-> View_EditarCategoriaAdministrador
+            View_CategoriasDeProductosAdministrador -down-> View_EliminarCategoriaAdministrador
+
+        View_AdministradorHomePage -down-> View_UsuariosRegistrados
+            View_UsuariosRegistrados -down-> View_CrearUsuario
+            View_UsuariosRegistrados -down-> View_EditarUsuario
+            View_UsuariosRegistrados -down-> View_EliminarUsuario
+
+        View_AdministradorHomePage -down-> View_RolesRegistrados
+            View_RolesRegistrados -down-> View_CrearRol
+            View_RolesRegistrados -down-> View_EditarRol
+            View_RolesRegistrados -down-> View_EliminarRol
+
+        View_AdministradorHomePage -down-> View_ReportesAdministrador
+            View_ReportesAdministrador -down-> View_GenerarReporteAdministrador
+                View_GenerarReporteAdministrador -down-> View_SeleccionarFormatoDelContenidoAdministrador
+            View_ReportesAdministrador -down-> View_ExportarReporteAdministrador
+                View_ExportarReporteAdministrador -down-> View_SeleccionarFormatoDelArchivoAdministrador
+
+
+View_Home -down-> View_SobreNosotros
+
+    View_SobreNosotros -down-> View_Equipo
+    View_SobreNosotros -down-> View_Vision
+    View_SobreNosotros -down-> View_Mision
+
+
+View_Home -down-> View_SoporteTecnico
+
+
+View_Home -down-> View_RegistroCliente
