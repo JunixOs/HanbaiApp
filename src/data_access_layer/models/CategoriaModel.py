@@ -5,6 +5,7 @@ from sqlalchemy import (
     Column , Numeric , Text , String , UniqueConstraint
 )
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 class CategoriaModel(Base):
     __tablename__ = "categoria"
@@ -27,6 +28,7 @@ class CategoriaModel(Base):
     descuento_categoria = Column(
         Numeric(5 , 2) , 
         name="descuento_categoria" , 
+        default=0,
         nullable=True , 
     )
 
@@ -36,6 +38,11 @@ class CategoriaModel(Base):
         nullable=True
     )
 
+    producto = relationship(
+        "ProductoModel" , 
+        back_populates="categoria"
+    )
+
     __table_args__ = (
-        UniqueConstraint("id_categoria" , "nombre" , name="Categoria_UQ")
+        UniqueConstraint("id_categoria" , "nombre" , name="Categoria_UQ"),
     )

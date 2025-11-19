@@ -1,8 +1,9 @@
 from src.data_access_layer.base import Base
+from src.data_access_layer.models.RolReporteModel import rol_reporte
 
 import uuid
 from sqlalchemy import (
-    Column , String , TIMESTAMP , func , Text
+    Column , String , TIMESTAMP , func , Text , UniqueConstraint
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -19,7 +20,7 @@ class RolModel(Base):
     )
 
     nombre = Column(
-        String(199) , 
+        String(100) , 
         name="nombre",
         nullable=False , 
         unique=True
@@ -44,3 +45,13 @@ class RolModel(Base):
     )
 
     usuario = relationship("UsuarioModel" , back_populates="rol" , uselist=False)
+
+    reporte = relationship(
+        "ReporteModel" , 
+        secondary=rol_reporte , 
+        back_populates="rol"
+    )
+
+    __table_args__ = (
+        UniqueConstraint("id_rol" , "nombre" , name="Rol_UQ"),
+    )

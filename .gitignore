@@ -209,3 +209,7 @@ __marimo__/
 
 # Hanbai Folders
 out/
+
+# Hanbai files
+*.db
+*.sqlite3

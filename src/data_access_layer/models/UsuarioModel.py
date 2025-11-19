@@ -2,13 +2,13 @@ from src.data_access_layer.base import Base
 
 import uuid
 from sqlalchemy import (
-    Column , Integer , String , TIMESTAMP , func , CheckConstraint , ForeignKey
+    Column , String , TIMESTAMP , func , CheckConstraint , ForeignKey
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import validates , relationship
 
 class UsuarioModel(Base):
-    __tablename__ = "usuarios"
+    __tablename__ = "usuario"
 
     id_usuario = Column(
         UUID(as_uuid = True) , 
@@ -66,19 +66,17 @@ class UsuarioModel(Base):
     # print(usuario.rol) = SELECT * FROM rol WHERE rol.id_rol = usuario.rol_id;
     rol = relationship(
         "RolModel" , 
-        back_populates="usuario" , 
-        uselist=False
+        back_populates="usuario"
     )
 
     # Atributo python para obtener VentaModel asociado
     venta = relationship(
         "VentaModel" , 
-        back_populates="usuario" , 
-        uselist=True
+        back_populates="usuario"
     )
 
     __table_args__ = (
-        CheckConstraint("length(dni) >= 8" , name="dni_min_len")
+        CheckConstraint("length(dni) >= 8" , name="dni_min_len"),
     )
 
     @validates("correo")

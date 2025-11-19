@@ -2,7 +2,7 @@ from src.data_access_layer.base import Base
 
 import uuid
 from sqlalchemy import (
-    Column , String , TIMESTAMP , Numeric , func , ForeignKey
+    Column , Numeric , ForeignKey
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -18,16 +18,9 @@ class VentaModel(Base):
         name="id_venta"
     )
 
-    fecha = Column(
-        TIMESTAMP(timezone=True) , 
-        name="fecha" , 
-        server_default=func.now() , 
-        nullable=False 
-    )
-
-    total = Column(
+    subtotal = Column(
         Numeric(14 , 4) ,
-        name="total" ,
+        name="subtotal" ,
         nullable=False
     )
 

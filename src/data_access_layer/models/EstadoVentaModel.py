@@ -32,11 +32,10 @@ class EstadoVentaModel(Base):
 
     venta = relationship(
         "VentaModel" , 
-        back_populates="estado_venta" , 
-        uselist=True
+        back_populates="estado_venta"
     )
 
     # Unique constraint
     __table_args__ = (
-        UniqueConstraint("id_estado_venta" , "nombre" , name="EstadoVenta_UQ")
+        UniqueConstraint("id_estado_venta" , "nombre" , name="EstadoVenta_UQ"),
     )
