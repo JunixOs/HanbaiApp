@@ -1,0 +1,63 @@
+@startuml "Modulo Notificaciones - v1 - 17-11-2025"
+left to right direction
+!theme plain
+
+skinparam shadowing true
+skinparam roundcorner 18
+skinparam dpi 150
+
+skinparam defaultFontName "Roboto"
+skinparam defaultFontSize 14
+skinparam defaultFontColor #0F1419
+
+skinparam actorStyle awesome
+skinparam actor {
+    BackgroundColor #F5F7FA
+    BorderColor #1F2D3D
+    FontColor #0F1419
+}
+
+skinparam usecase {
+    BackgroundColor #E8F2FE
+    BorderColor #1A73E8
+    FontColor #0F1419
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #999
+    FontColor #333
+}
+
+skinparam arrow {
+    Color #1F2D3D
+    Thickness 2
+}
+
+skinparam style strictuml
+skinparam packageStyle rectangle
+
+actor "HanbaiApp" as HanbaiApp
+
+package "Notificaciones" {
+    usecase "Notificar Bajo Stock" as UC_NotificarBajoStock
+    usecase "Notificar Pago Exitoso" as UC_NotificarPagoExitoso
+    usecase "Notificar Anulacion de Venta" as UC_NotificarAnulacionDeVenta
+    usecase "Notificar Eliminacion de Reporte" as UC_NotificarEliminacionDeReporte
+    usecase "Notificar Eliminacion de Cuenta" as UC_NotificarEliminacionDeCuenta
+}
+
+actor "Usuario" as Usuario
+actor "Encargado" as Encargado
+
+HanbaiApp --> UC_NotificarBajoStock
+    UC_NotificarBajoStock --> Encargado
+HanbaiApp --> UC_NotificarEliminacionDeReporte
+    UC_NotificarEliminacionDeReporte --> Encargado
+HanbaiApp --> UC_NotificarPagoExitoso
+    UC_NotificarPagoExitoso --> Usuario
+HanbaiApp --> UC_NotificarEliminacionDeCuenta
+    UC_NotificarEliminacionDeCuenta --> Usuario
+HanbaiApp --> UC_NotificarAnulacionDeVenta
+    UC_NotificarAnulacionDeVenta --> Usuario
+@enduml
