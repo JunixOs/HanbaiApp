@@ -1,8 +1,10 @@
 from dotenv import load_dotenv
 import os
+from contextlib import contextmanager
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 
 load_dotenv()
 
@@ -13,19 +15,29 @@ engine = create_engine(
     echo=False
 )
 
-Session = sessionmaker(
-    autocommit = False , 
+# Aquí Session no es una sesión concreta, sino una factoría de sesiones.
+# Cada vez que haces session = Session(), obtienes una instancia de sqlalchemy.orm.Session que puedes usar para .query(), .add(), .commit(), etc.
+LocalSession = sessionmaker(
     autoflush=False,
     bind=engine
 )
 # Crear sesión
-session_local_hanbai_db = Session()
+
+@contextmanager
+def get_db_session():
+    session: Session = LocalSession()
+    try:
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 # Ejemplo: consulta
-# from session import session_local_hanbai_db
+# from src.models import UsuarioModel  # ejemplo
 
-# Ejemplo: consulta
-# productos = session_local_hanbai_db.query(ProductoModel).all()
-# session_local_hanbai_db.close()
-# productos = session_local_hanbai_db.query(ProductoModel).all()
-# session_local_hanbai_db.close()
+# with get_db_session() as db:
+#     usuario = db.query(UsuarioModel).first()
+#     print(usuario.nombre)
