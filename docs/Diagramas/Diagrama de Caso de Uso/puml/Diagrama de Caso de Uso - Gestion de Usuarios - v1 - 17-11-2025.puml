@@ -1,0 +1,88 @@
+@startuml "Modulo Gestion de Usuarios - v1 - 17-11-2025"
+left to right direction
+!theme plain
+
+skinparam shadowing true
+skinparam roundcorner 18
+skinparam dpi 150
+
+skinparam defaultFontName "Roboto"
+skinparam defaultFontSize 14
+skinparam defaultFontColor #0F1419
+
+skinparam actorStyle awesome
+skinparam actor {
+    BackgroundColor #F5F7FA
+    BorderColor #1F2D3D
+    FontColor #0F1419
+}
+
+skinparam usecase {
+    BackgroundColor #E8F2FE
+    BorderColor #1A73E8
+    FontColor #0F1419
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #999
+    FontColor #333
+}
+
+skinparam arrow {
+    Color #1F2D3D
+    Thickness 2
+}
+
+skinparam style strictuml
+skinparam packageStyle rectangle
+
+actor "Usuario" as Usuario
+actor "Cliente" as Cliente
+actor "Administrador" as Administrador
+actor "Encargado de Tienda" as EncargadoDeTienda
+
+package "Gestion de Usuarios" {
+    usecase "Iniciar Sesion" as UC_IniciarSesion
+        usecase "Validar Credenciales" as UC_ValidarCredenciales
+    usecase "Registrarse" as UC_Registrarse
+        usecase "Asignar Rol" as UC_AsignarRol
+        usecase "Validar Correo" as UC_ValidarCorreo
+        usecase "Validar DNI" as UC_ValidarDNI
+    usecase "Ver Roles" as UC_VerRoles
+    usecase "Crear Roles" as UC_CrearRoles
+    usecase "Editar Roles" as UC_EditarRoles
+    usecase "Eliminar Roles" as UC_EliminarRoles
+    usecase "Crear Usuarios" as UC_CrearUsuarios
+    usecase "Ver Usuarios" as UC_VerUsuarios
+    usecase "Editar Usuarios" as UC_EditarUsuarios
+    usecase "Eliminar Usuarios" as UC_EliminarUsuarios
+    usecase "Eliminar cuenta" as UC_EliminarCuenta
+    usecase "Editar Informacion" as UC_EditarInformacion
+    usecase "Contactar con Soporte" as UC_ContactarConSoporte
+}
+
+Cliente --> Usuario
+Administrador --> Usuario
+EncargadoDeTienda --> Usuario
+
+Usuario --> UC_IniciarSesion
+    UC_IniciarSesion --> UC_ValidarCredenciales : <<include>>
+Usuario --> UC_Registrarse
+    UC_Registrarse --> UC_AsignarRol : <<include>>
+    UC_Registrarse --> UC_ValidarCorreo : <<include>>
+    UC_Registrarse --> UC_ValidarDNI : <<include>>
+Usuario --> UC_EditarInformacion
+Usuario --> UC_EliminarCuenta
+Usuario --> UC_ContactarConSoporte
+
+Administrador --> UC_VerRoles
+    UC_VerRoles --> UC_EditarRoles : <<extend>>
+    UC_VerRoles --> UC_EliminarRoles : <<extend>>
+    UC_VerRoles --> UC_CrearRoles : <<extend>>
+Administrador --> UC_VerUsuarios
+    UC_VerUsuarios --> UC_CrearUsuarios : <<extend>>
+    UC_VerUsuarios --> UC_EditarUsuarios : <<extend>>
+    UC_VerUsuarios --> UC_EliminarUsuarios : <<extend>>
+
+@enduml

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Historial de Ventas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Historial de Ventas</h2>
+    <a href="{{ url_for('ventas.catalogo') }}" class="btn btn-primary">Nueva Venta</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Total</th>
+                    <th>Detalles</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                <tr>
+                    <td><small>{{ v.id_venta }}</small></td>
+                    <td class="fw-bold text-success">${{ "{:.2f}".format(v.subtotal) }}</td>
+                    <td>
+                        <ul class="mb-0 list-unstyled">
+                            {% for d in v.detalles %}
+                            <li><small>{{ d.cantidad }}x {{ d.nombre_producto }}</small></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('ventas.anular', id_venta=v.id_venta) }}" method="POST" onsubmit="return confirm('¿Anular esta venta y devolver stock?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Anular</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center">No hay ventas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

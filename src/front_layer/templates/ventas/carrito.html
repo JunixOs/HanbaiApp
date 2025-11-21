@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Mi Carrito{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Tu Carrito de Compras</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio Unit.</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">TOTAL:</td>
+                    <td class="fw-bold fs-5" id="cart-total">$0.00</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ url_for('ventas.catalogo') }}" class="btn btn-outline-secondary">Seguir Comprando</a>
+            <button onclick="procesarCompra()" class="btn btn-success btn-lg">Confirmar y Pagar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cargarCarrito() {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        let tbody = document.getElementById('cart-items');
+        let total = 0;
+        tbody.innerHTML = '';
+
+        if (carrito.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">El carrito está vacío</td></tr>';
+            return;
+        }
+
+        carrito.forEach((item, index) => {
+            let subtotal = item.precio * item.cantidad;
+            total += subtotal;
+            
+            let row = `
+                <tr>
+                    <td>${item.nombre}</td>
+                    <td>$${item.precio.toFixed(2)}</td>
+                    <td>
+                        <input type="number" min="1" value="${item.cantidad}" 
+                               onchange="actualizarCantidad(${index}, this.value)" class="form-control" style="width: 80px;">
+                    </td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                    <td>
+                        <button onclick="eliminarItem(${index})" class="btn btn-sm btn-danger">X</button>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+        
+        document.getElementById('cart-total').innerText = '$' + total.toFixed(2);
+    }
+
+    function actualizarCantidad(index, cantidad) {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        if (cantidad < 1) return;
+        carrito[index].cantidad = parseInt(cantidad);
+        localStorage.setItem('carrito_hanbai', JSON.stringify(carrito));
+        cargarCarrito();
+    }
+
+    function eliminarItem(index) {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        carrito.splice(index, 1);
+        localStorage.setItem('carrito_hanbai', JSON.stringify(carrito));
+        cargarCarrito();
+    }
+
+    async function procesarCompra() {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        if (carrito.length === 0) {
+            alert("El carrito está vacío");
+            return;
+        }
+
+        if (!confirm("¿Confirmar compra?")) return;
+
+        try {
+            const response = await fetch("{{ url_for('ventas.procesar_compra') }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ carrito: carrito })
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                localStorage.removeItem('carrito_hanbai'); // Limpiar carrito
+                window.location.href = result.redirect_url;
+            } else {
+                alert("Error: " + result.message);
+            }
+        } catch (error) {
+            alert("Error de conexión");
+            console.error(error);
+        }
+    }
+
+    cargarCarrito();
+</script>
+{% endblock %}

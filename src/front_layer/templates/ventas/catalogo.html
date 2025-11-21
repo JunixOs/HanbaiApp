@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Catálogo de Compras{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Catálogo de Productos</h2>
+    </div>
+    <div class="col text-end">
+        <a href="{{ url_for('ventas.carrito') }}" class="btn btn-warning">
+            <i class="bi bi-cart-fill"></i> Ver Carrito <span id="cart-count" class="badge bg-danger">0</span>
+        </a>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for p in products %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ p.nombre }}</h5>
+                <p class="card-text text-muted">{{ p.descripcion }}</p>
+                <h4 class="text-primary">${{ "{:.2f}".format(p.precio) }}</h4>
+                <p class="card-text">Stock disponible: <span class="fw-bold">{{ p.stock }}</span></p>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+                {% if p.stock > 0 %}
+                <button onclick="agregarAlCarrito('{{ p.id_producto }}', '{{ p.nombre }}', {{ p.precio }})" class="btn btn-outline-primary w-100">
+                    Agregar al Carrito
+                </button>
+                {% else %}
+                <button class="btn btn-secondary w-100" disabled>Agotado</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    // Lógica simple de carrito local
+    function agregarAlCarrito(id, nombre, precio) {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        
+        // Buscar si ya existe
+        let item = carrito.find(i => i.producto_id === id);
+        if (item) {
+            item.cantidad++;
+        } else {
+            carrito.push({ producto_id: id, nombre: nombre, precio: precio, cantidad: 1 });
+        }
+        
+        localStorage.setItem('carrito_hanbai', JSON.stringify(carrito));
+        actualizarContador();
+        alert('Producto agregado: ' + nombre);
+    }
+
+    function actualizarContador() {
+        let carrito = JSON.parse(localStorage.getItem('carrito_hanbai')) || [];
+        let total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+        document.getElementById('cart-count').innerText = total;
+    }
+    
+    actualizarContador(); // Al cargar página
+</script>
+{% endblock %}

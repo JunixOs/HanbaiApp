@@ -1,0 +1,89 @@
+Project "HanbaiApp" {
+  database_type: "PostgreSQL"
+}
+
+Table usuario{
+  id_usuario UUID [pk , not null]
+  nombre varchar(100) [not null]
+  correo varchar(100) [not null , unique]
+  password_hash varchar(255) [not null]
+  dni varchar(20) [not null , unique]
+  creadoEn timestamp [default: 'now()']
+  actualizadoEn timestamp [default: 'now()']
+
+  // Relacion 1:1 con "rol"
+  rol_id UUID [not null , ref: > rol.id_rol]
+}
+
+Table rol{
+  id_rol UUID [pk , not null]
+  nombre varchar(100) [not null , unique]
+  descripcion TEXT
+  creadoEn timestamp [default: 'now()']
+  actualizadoEn timestamp [default: 'now()']
+}
+
+Table venta {
+  id_venta UUID [pk , not null]
+  fecha timestamp [not null , default: 'now()']
+  total numeric(14 , 4) [not null]
+
+  // Relacion 1:1 con "estado_venta"
+  estado_venta_id UUID [not null , ref: > estado_venta.id_estado_venta , unique]
+  usuario_id UUID [not null , ref: > usuario.id_usuario]
+}
+
+Table venta_cargo {
+  venta_id UUID [pk , ref: > venta.id_venta]
+  cargo_id UUID [pk , ref: > cargo.id_cargo]
+
+  Indexes {
+    (venta_id, cargo_id) [unique, name: "VentaCargo_UQ"]
+  }
+}
+
+Table cargo {
+  id_cargo UUID [pk , not null]
+  nombre varchar(100) [not null ]
+  porcentaje_total numeric(5 , 2) [not null]
+  descripcion TEXT
+  creadoEn timestamp [default: 'now()']
+  actualizadoEn timestamp [default: 'now()']
+}
+
+Table estado_venta {
+  id_estado_venta UUID [pk , not null]
+  nombre varchar(100) [not null]
+  descripcion TEXT
+
+  indexes {
+    (id_estado_venta , nombre) [unique , name: "EstadoVenta_UQ"]
+  }
+}
+
+Table producto {
+  id_producto UUID [pk , not null]
+  nombre varchar(255) [not null , unique]
+  descripcion TEXT
+  precio numeric(8 , 2) [not null]
+  stock integer [not null]
+  descuento_producto numeric(5 , 2)
+
+  id_venta UUID [ref: > venta.id_venta]
+  id_categoria UUID [ref: > categoria.id_categoria]
+
+  indexes {
+    (id_producto , nombre) [unique , name: "Producto_UQ"]
+  }
+}
+
+Table categoria {
+  id_categoria UUID [pk , not null]
+  nombre varchar(100) [not null , unique]
+  descuento_categoria numeric(5 , 2) [default: '0']
+  descripcion TEXT
+
+  indexes {
+    (id_categoria , nombre) [unique , name: "Categoria_UQ"]
+  }
+}

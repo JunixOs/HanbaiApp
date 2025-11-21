@@ -1,0 +1,98 @@
+@startuml "Modulo Reportes y Analiticas - v1 - 17-11-2025"
+left to right direction
+!theme plain
+
+skinparam shadowing true
+skinparam roundcorner 18
+skinparam dpi 150
+
+skinparam defaultFontName "Roboto"
+skinparam defaultFontSize 14
+skinparam defaultFontColor #0F1419
+
+skinparam actorStyle awesome
+skinparam actor {
+    BackgroundColor #F5F7FA
+    BorderColor #1F2D3D
+    FontColor #0F1419
+}
+
+skinparam usecase {
+    BackgroundColor #E8F2FE
+    BorderColor #1A73E8
+    FontColor #0F1419
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #999
+    FontColor #333
+}
+
+skinparam arrow {
+    Color #1F2D3D
+    Thickness 2
+}
+
+skinparam style strictuml
+skinparam packageStyle rectangle
+
+actor "Usuario" as Usuario
+actor "Encargado" as Encargado
+actor "Cliente" as Cliente
+actor "Administrador" as Administrador
+actor "Encargado de Tienda" as EncargadoDeTienda
+
+package "Reportes y Analiticas" {
+    usecase "Mostrar Productos \nmas Vendidos" as UC_MostrarProductosMasVendidos
+    usecase "Mostrar Productos \nmas Vendidos en el Ultimo Mes" as UC_MostrarProductosMasVendidosEnElUltimoMes
+    usecase "Mostrar Productos \nmas Vendidos en la Ultima Semana" as UC_MostrarProductosMasVendidosEnLaUltimaSemana
+    usecase "Ver Ingresos Semanales o Mensuales" as UC_VerIngresosSemanalesOMensuales
+    usecase "Ver Ventas" as UC_VerVentas
+    usecase "Ver Ventas del Dia" as UC_VerVentasDelDia
+    usecase "Ver Ventas de la Semana" as UC_VerVentasDeLaSemana
+    usecase "Ver Ventas del Mes" as UC_VerVentasDelMes
+    usecase "Mostrar Productos Nuevos" as UC_MostrarProductosNuevos
+    usecase "Mostrar Productos con Bajo Stock" as UC_MostrarProductosConBajoStock 
+    usecase "Mostrar Categorias \ncon mas Ventas" as UC_MostrarCategoriasConMasVentas
+    usecase "Ver Graficos de Resumen" as UC_VerGraficosDeResumen
+    usecase "Ver Compras semanales o mensuales" as UC_VerComprasSemanalesOMensuales 
+    usecase "Ver Reportes" as UC_VerReportes
+    usecase "Generar Reporte" as UC_GenerarReporte
+    usecase "Exportar Reporte" as UC_ExportarReporte
+    usecase "Eliminar Reporte" as UC_EliminarReporte
+    usecase "Seleccionar Formato \ndel Archivo (.csv , .pdf , etc.)" as UC_SeleccionarFormatoDelArchivo
+    usecase "Seleccionar Formato \ndel Contenido" as UC_SeleccionarFormatoDelContenido
+}
+
+Cliente --> Usuario
+Administrador --> Usuario
+EncargadoDeTienda --> Usuario
+
+Administrador --> Encargado
+EncargadoDeTienda --> Encargado
+
+Usuario --> UC_MostrarProductosMasVendidos
+    UC_MostrarProductosMasVendidos --> UC_MostrarProductosMasVendidosEnElUltimoMes : <<extend>>
+    UC_MostrarProductosMasVendidos --> UC_MostrarProductosMasVendidosEnLaUltimaSemana : <<extend>>
+Usuario --> UC_MostrarCategoriasConMasVentas
+
+Usuario --> UC_MostrarProductosNuevos
+Usuario --> UC_VerGraficosDeResumen
+
+Encargado --> UC_VerVentas
+    UC_VerVentas --> UC_VerVentasDelDia : <<extend>>
+    UC_VerVentas --> UC_VerVentasDeLaSemana : <<extend>>
+    UC_VerVentas --> UC_VerVentasDelMes : <<extend>>
+Encargado --> UC_VerReportes
+    UC_VerReportes --> UC_GenerarReporte : <<extend>>
+        UC_GenerarReporte --> UC_SeleccionarFormatoDelContenido : <<include>>
+    UC_VerReportes --> UC_ExportarReporte : <<extend>>
+        UC_ExportarReporte --> UC_SeleccionarFormatoDelArchivo : <<include>>
+    UC_VerReportes --> UC_EliminarReporte : <<extend>>
+Encargado --> UC_VerIngresosSemanalesOMensuales
+Encargado --> UC_MostrarProductosConBajoStock : <<estend>>
+
+Cliente --> UC_VerComprasSemanalesOMensuales
+
+@enduml

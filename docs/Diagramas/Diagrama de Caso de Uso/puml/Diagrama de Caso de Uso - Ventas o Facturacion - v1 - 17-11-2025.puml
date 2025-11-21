@@ -1,0 +1,86 @@
+@startuml "Modulo Ventas o Facturacion - v1 - 17-11-2025"
+
+left to right direction
+!theme plain
+
+skinparam shadowing true
+skinparam roundcorner 18
+skinparam dpi 150
+
+skinparam defaultFontName "Roboto"
+skinparam defaultFontSize 14
+skinparam defaultFontColor #0F1419
+
+skinparam actorStyle awesome
+skinparam actor {
+    BackgroundColor #F5F7FA
+    BorderColor #1F2D3D
+    FontColor #0F1419
+}
+
+skinparam usecase {
+    BackgroundColor #E8F2FE
+    BorderColor #1A73E8
+    FontColor #0F1419
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #999
+    FontColor #333
+}
+
+skinparam arrow {
+    Color #1F2D3D
+    Thickness 2
+}
+
+skinparam style strictuml
+skinparam packageStyle rectangle
+
+actor "Cliente" as Cliente
+actor "Administrador" as Administrador
+actor "Encargado de Tienda" as EncargadoDeTienda
+
+package "Ventas o Facturacion" {
+    usecase "Añadir Producto al Carrito" as UC_AñadirProductoAlCarrito
+    usecase "Eliminar Producto dal Carrito" as UC_EliminarProductoDelCarrito
+    usecase "Mostrar Subtotal" as UC_MostrarSubtotal
+    usecase "Mostrar Total (con Cargos Incluidos)" as UC_MostrarTotal
+    usecase "Ver Productos en el Carrito" as UC_VerProductosEnElCarrito
+    usecase "Comprar Productos" as UC_ComprarProductos
+    usecase "Seleccionar Metodo de Pago" as UC_SeleccionarMetodoDePago
+    usecase "Aplicar Cargos (IGV, etc.)" as UC_AplicarCargos
+    usecase "Validar Pago" as UC_ValidarPago
+    usecase "Actualizar Stock" as UC_AcutalizarStock
+    usecase "Registrar en Historial de Ventas" as UC_RegistrarEnHistorialDeVentas
+    usecase "Generar Comprobarnte de Compra" as UC_GenerarComprobarnteDeCompra
+    usecase "Ver Historial de Compras de la Cuenta" as UC_VerHistorialDeComprasDeLaCuenta
+    usecase "Ver Comprobantes de Compra" as UC_VerComprobantesDeCompra
+    usecase "Ver Historial de Ventas General" as UC_VerHistorialDeVentasGeneral
+    usecase "Anular Venta" as UC_AnularVenta
+    usecase "Eliminar Comprobante de Compra" as UC_EliminarComprobantedeCompra
+}
+
+Cliente --> UC_VerProductosEnElCarrito
+    UC_VerProductosEnElCarrito --> UC_EliminarProductoDelCarrito : <<extend>>
+    UC_VerProductosEnElCarrito --> UC_MostrarSubtotal : <<include>>
+    UC_VerProductosEnElCarrito --> UC_MostrarTotal : <<include>>
+    UC_VerProductosEnElCarrito --> UC_ComprarProductos : <<extend>>
+        UC_ComprarProductos --> UC_SeleccionarMetodoDePago : <<include>>
+        UC_ComprarProductos --> UC_AplicarCargos : <<include>>
+            UC_SeleccionarMetodoDePago --> UC_ValidarPago : <<include>>
+                UC_ValidarPago --> UC_AcutalizarStock : <<include>>
+                UC_ValidarPago --> UC_RegistrarEnHistorialDeVentas : <<include>>
+                UC_ValidarPago --> UC_GenerarComprobarnteDeCompra : <<include>>
+Cliente --> UC_VerHistorialDeComprasDeLaCuenta
+    UC_VerHistorialDeComprasDeLaCuenta --> UC_VerComprobantesDeCompra : <<extend>>
+Cliente --> UC_AñadirProductoAlCarrito
+
+Administrador --> UC_VerHistorialDeVentasGeneral
+EncargadoDeTienda --> UC_VerHistorialDeVentasGeneral
+    UC_VerHistorialDeVentasGeneral --> UC_AnularVenta : <<extend>>
+        UC_AnularVenta --> UC_EliminarComprobantedeCompra : <>include>>
+    UC_VerHistorialDeVentasGeneral --> UC_VerComprobantesDeCompra : <<extend>>
+
+@enduml

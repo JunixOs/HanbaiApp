@@ -1,0 +1,91 @@
+@startuml "Modulo Gestion de Productos - v1 - 17-11-2025"
+left to right direction
+!theme plain
+
+skinparam shadowing true
+skinparam roundcorner 18
+skinparam dpi 150
+
+skinparam defaultFontName "Roboto"
+skinparam defaultFontSize 14
+skinparam defaultFontColor #0F1419
+
+skinparam actorStyle awesome
+skinparam actor {
+    BackgroundColor #F5F7FA
+    BorderColor #1F2D3D
+    FontColor #0F1419
+}
+
+skinparam usecase {
+    BackgroundColor #E8F2FE
+    BorderColor #1A73E8
+    FontColor #0F1419
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #999
+    FontColor #333
+}
+
+skinparam arrow {
+    Color #1F2D3D
+    Thickness 2
+}
+
+skinparam style strictuml
+skinparam packageStyle rectangle
+
+actor "Usuario" as Usuario
+actor "Cliente" as Cliente
+actor "Administrador" as Administrador
+actor "Encargado de Tienda" as EncargadoDeTienda
+
+package "Gestion de Productos" {
+    usecase "Ver Productos" as UC_VerProductos
+        usecase "Filtrar Productos" as UC_FiltrarProductos
+    usecase "Ver Categorias de Productos" as UC_VerCategoriasDeProductos
+    usecase "Crear Venta" as UC_CrearVenta
+        usecase "Actualizar Stock" as UC_ActualizarStock
+    usecase "Editar Productos" as UC_EditarProductos
+    usecase "Añadir Productos" as UC_AñadirProductos
+    usecase "Eliminar Productos" as UC_EliminarProductos
+    usecase "Definir Stock" as UC_DefinirStock
+    usecase "Editar Stock" as UC_EditarStock
+    usecase "Crear Categoria de Productos" as UC_CrearCategoriaDeProductos
+        usecase "Asignar Productos a Categoria" as UC_AsignarProductosACategoria
+        usecase "Eliminar Productos de Categoria" as UC_EliminarProductosDeCategoria
+    usecase "Editar Categoria de Productos" as  UC_EditarCategoriaDeProductos
+    usecase "Eliminar Categoria de Productos" as UC_EliminarCategoriaDeProductos
+}
+
+Cliente --> Usuario
+Administrador --> Usuario
+EncargadoDeTienda --> Usuario
+
+Cliente --> UC_CrearVenta
+    UC_CrearVenta --> UC_ActualizarStock : <<include>>
+
+Usuario --> UC_VerProductos
+    UC_VerProductos --> UC_FiltrarProductos : <<extend>>
+Usuario --> UC_VerCategoriasDeProductos
+    UC_VerCategoriasDeProductos --> UC_FiltrarProductos : <<extend>>
+
+EncargadoDeTienda --> UC_AñadirProductos
+EncargadoDeTienda --> UC_EditarProductos
+EncargadoDeTienda --> UC_EliminarProductos
+    UC_AñadirProductos --> UC_DefinirStock : <<include>>
+    UC_EditarProductos --> UC_EditarStock : <<extend>>
+
+EncargadoDeTienda --> UC_CrearCategoriaDeProductos
+EncargadoDeTienda --> UC_EditarCategoriaDeProductos
+
+    UC_CrearCategoriaDeProductos --> UC_AsignarProductosACategoria : <<extend>>
+    UC_CrearCategoriaDeProductos --> UC_EliminarProductosDeCategoria : <<extend>>
+    UC_EditarCategoriaDeProductos --> UC_AsignarProductosACategoria : <<extend>>
+    UC_EditarCategoriaDeProductos --> UC_EliminarProductosDeCategoria : <<extend>>
+
+EncargadoDeTienda --> UC_EliminarCategoriaDeProductos
+
+@enduml
