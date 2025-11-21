@@ -21,6 +21,10 @@ class IUsuarioRepository(ABC):
     def save(self , usuario_model: UsuarioModel) -> None:
         pass
 
+    @abstractmethod
+    def findByCorreo(self, correo: str) -> UsuarioModel:
+        pass
+
     # Actualizar datos
     # with get_db_session() as db:
     #     usuario = db.query(UsuarioModel).filter_by(dni="12345678").first()

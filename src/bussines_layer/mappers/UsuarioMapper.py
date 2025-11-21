@@ -6,7 +6,8 @@ from uuid import UUID
 
 class UsuarioMapper(IUsuarioMapper):
 
-    def toORM(self, usuario_domain_entity: UsuarioDomainEntity) -> UsuarioModel:
+    @staticmethod
+    def toORM(usuario_domain_entity: UsuarioDomainEntity) -> UsuarioModel:
         return UsuarioModel(
             nombre=usuario_domain_entity.nombre , 
             correo=usuario_domain_entity.correo,
@@ -17,10 +18,11 @@ class UsuarioMapper(IUsuarioMapper):
             rol_id=UUID(usuario_domain_entity.rol_id)
         )
     
-    def toDomain(self, usuario_model: UsuarioModel) -> UsuarioDomainEntity:
+    @staticmethod
+    def toDomain(usuario_model: UsuarioModel) -> UsuarioDomainEntity:
         usuario_domain_entity: UsuarioDomainEntity = UsuarioDomainEntity()
 
-        usuario_domain_entity.id_usuario = str(usuario_model.id_usuario)
+        usuario_domain_entity.id_usuario = str(usuario_model.id_usuario) # type: ignore
         usuario_domain_entity.nombre = usuario_model.nombre # type: ignore
         usuario_domain_entity.correo = usuario_model.correo # type: ignore
         usuario_domain_entity.password_hash = usuario_model.password_hash # type: ignore

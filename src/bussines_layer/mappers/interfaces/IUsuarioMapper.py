@@ -7,9 +7,11 @@ from abc import ABC, abstractmethod
 class IUsuarioMapper(ABC):
 
     @abstractmethod
-    def toORM(self, usuario_domain_etity: UsuarioDomainEntity) -> UsuarioModel:
+    @staticmethod
+    def toORM(usuario_domain_entity: UsuarioDomainEntity) -> UsuarioModel:
         pass
 
     @abstractmethod
-    def toDomain(self, usuario_model: UsuarioModel) -> UsuarioDomainEntity:
+    @staticmethod
+    def toDomain(usuario_model: UsuarioModel) -> UsuarioDomainEntity:
         pass
