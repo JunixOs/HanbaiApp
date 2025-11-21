@@ -47,3 +47,9 @@ class VentaModel(Base):
         back_populates="venta" , 
         uselist=False
     )
+
+    detalles = relationship(
+        "DetalleVentaModel", 
+        back_populates="venta", 
+        cascade="all, delete-orphan"
+        )
