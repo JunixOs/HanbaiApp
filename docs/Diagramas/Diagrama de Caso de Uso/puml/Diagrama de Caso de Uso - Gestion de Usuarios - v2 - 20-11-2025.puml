@@ -62,6 +62,7 @@ package "Gestion de Usuarios" {
     usecase "Eliminar cuenta" as UC_EliminarCuenta
     usecase "Editar Informacion" as UC_EditarInformacion
     usecase "Contactar con Soporte" as UC_ContactarConSoporte
+    usecase "Sobre Nosotros" as UC_SobreNosotros
 }
 
 Cliente --> Usuario
@@ -73,6 +74,7 @@ Usuario --> UC_IniciarSesion
 Usuario --> UC_EditarInformacion
 Usuario --> UC_EliminarCuenta
 Usuario --> UC_ContactarConSoporte
+Usuario --> UC_SobreNosotros
 
 Administrador --> UC_VerRoles
     UC_VerRoles --> UC_EditarRoles : <<extend>>
