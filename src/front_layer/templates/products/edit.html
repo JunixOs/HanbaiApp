@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Producto - HanbaiApp{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold">Editar Producto</h2>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb text-muted small">
+            <li class="breadcrumb-item"><a href="{{ url_for('products.index') }}" class="text-decoration-none">Inventario</a></li>
+            <li class="breadcrumb-item active">Editar</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="card border-0 shadow-sm" style="max-width: 800px;">
+    <div class="card-body p-4">
+        <form action="{{ url_for('products.edit', id=producto.id_producto) }}" method="POST">
+            <div class="mb-4">
+                <label class="form-label">Nombre del Producto</label>
+                <input type="text" class="form-control" name="nombre" value="{{ producto.nombre }}" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="4">{{ producto.descripcion }}</textarea>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">Categoría</label>
+                    <input type="text" class="form-control bg-light" value="{{ producto.categoria_id }}" readonly>
+                    <div class="form-text small">La categoría no se puede cambiar en esta vista.</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Precio (USD)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">$</span>
+                        <input type="number" step="0.01" class="form-control" name="precio" value="{{ producto.precio }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Cantidad en Stock</label>
+                <input type="number" class="form-control" name="stock" value="{{ producto.stock }}" required style="max-width: 200px;">
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-end gap-3">
+                <a href="{{ url_for('products.index') }}" class="btn btn-light px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

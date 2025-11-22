@@ -1,5 +1,7 @@
 from src.data_access_layer.base import Base
 from src.data_access_layer.models.ComprobanteProductoModel import comprobante_producto
+from src.data_access_layer.models.ComprobanteModel import ComprobanteModel 
+# --------------------------
 
 import uuid
 from sqlalchemy import (
@@ -56,6 +58,7 @@ class ProductoModel(Base):
         name="categoria_id" , 
         nullable=False
     )
+    
     categoria = relationship(
         "CategoriaModel" ,
         back_populates="producto"
