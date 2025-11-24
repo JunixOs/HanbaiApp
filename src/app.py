@@ -24,7 +24,6 @@ hanbai_main_app = Flask(
     template_folder=template_path
 )
 
-# Registrar blueprints
 hanbai_main_app.register_blueprint(home)
 hanbai_main_app.register_blueprint(users, url_prefix="/users")
 hanbai_main_app.register_blueprint(products_bp, url_prefix="/products")
