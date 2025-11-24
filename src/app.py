@@ -1,7 +1,6 @@
 import sys
 import os
 
-# Obtener la ruta de este archivo (que está en src/)
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
 # Agregar el directorio actual (src) al path para importar módulos
