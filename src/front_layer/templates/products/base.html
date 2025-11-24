@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>{% block title %}HanbaiApp{% endblock %}</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Principal del Dashboard -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='products/css/dashboard.css') }}">
+    
+    <!-- Estilos específicos de cada página -->
+    {% block styles %}{% endblock %}
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="/" class="sidebar-brand">
+            <i class="fas fa-cube"></i>
+            <span>HanbaiApp</span>
+        </a>
+
+        <div class="user-profile">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+                <h6>Admin Name</h6>
+                <span>Administrador</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="/" class="nav-link">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </a>
+            <a href="/products" class="nav-link active">
+                <i class="fas fa-box"></i> Productos
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> Ventas
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-users"></i> Clientes
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-file-alt"></i> Reportes
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-link logout-link">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

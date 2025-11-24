@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ==================== VARIABLES CSS ==================== */
+:root {
+    --sidebar-width: 260px;
+    --primary-color: #0f62fe;
+    --bg-body: #f3f4f6;
+    --text-main: #111827;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+}
+
+/* ==================== RESET ESPECÍFICO ==================== */
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* ==================== SIDEBAR (con especificidad alta) ==================== */
+body > aside.sidebar,
+aside.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid var(--border-color);
+    z-index: 1000;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    margin: 0;
+}
+
+/* Logo/Marca */
+aside.sidebar > a.sidebar-brand {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+}
+
+aside.sidebar > a.sidebar-brand > i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* Perfil de Usuario */
+aside.sidebar > div.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: #f9fafb;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+aside.sidebar div.user-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+aside.sidebar div.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+aside.sidebar div.user-info h6 {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+aside.sidebar div.user-info span {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Navegación */
+aside.sidebar nav.nav-menu,
+aside.sidebar div.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+}
+
+aside.sidebar a.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #4b5563;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    margin-bottom: 0;
+}
+
+aside.sidebar a.nav-link i {
+    width: 20px;
+    text-align: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+aside.sidebar a.nav-link:hover {
+    background-color: #eff6ff;
+    color: var(--primary-color);
+}
+
+aside.sidebar a.nav-link.active {
+    background-color: #eff6ff;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Footer del Sidebar */
+aside.sidebar > div.sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+aside.sidebar a.logout-link {
+    color: #dc2626;
+}
+
+aside.sidebar a.logout-link:hover {
+    background-color: #fee2e2;
+}
+
+/* ==================== CONTENIDO PRINCIPAL ==================== */
+body > main.main-wrapper,
+main.main-wrapper {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+    padding: 2rem 3rem;
+    background-color: var(--bg-body);
+}
+
+/* ==================== ELEMENTOS BÁSICOS ==================== */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    aside.sidebar {
+        width: 70px;
+    }
+    
+    aside.sidebar .sidebar-brand span,
+    aside.sidebar .user-info,
+    aside.sidebar .nav-link span {
+        display: none;
+    }
+    
+    aside.sidebar .user-profile {
+        padding: 8px;
+        justify-content: center;
+    }
+    
+    main.main-wrapper {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+        padding: 1.5rem;
+    }
+}
