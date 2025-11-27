@@ -10,7 +10,7 @@ class IUsuarioRepository(ABC):
         pass
 
     @abstractmethod
-    def findById(self , id_usuario: str) -> UsuarioModel:
+    def findById(self , id_usuario: str) -> UsuarioModel | None:
         pass
 
     @abstractmethod
@@ -19,6 +19,10 @@ class IUsuarioRepository(ABC):
 
     @abstractmethod
     def save(self , usuario_model: UsuarioModel) -> None:
+        pass
+
+    @abstractmethod
+    def findByCorreo(self, correo: str) -> UsuarioModel:
         pass
 
     # Actualizar datos

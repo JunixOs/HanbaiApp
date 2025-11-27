@@ -23,7 +23,7 @@ class ComprobanteModel(Base):
     # Relacion con venta
     venta_id = Column(
         UUID(as_uuid=True) , 
-        ForeignKey("venta.id_venta") , 
+        ForeignKey("venta.id_venta" , ondelete="CASCADE") , 
         name="venta_id" , 
         nullable=False
     )
@@ -55,13 +55,15 @@ class ComprobanteModel(Base):
     producto = relationship(
         "ProductoModel" , 
         secondary=comprobante_producto , 
-        back_populates="comprobante"
+        back_populates="comprobante" , 
+        passive_deletes=True
     )
 
     cargo = relationship(
         "CargoModel" , 
         secondary=comprobante_cargo , 
-        back_populates="comprobante"
+        back_populates="comprobante" , 
+        passive_deletes=True
     )
 
     __table_args__ = (

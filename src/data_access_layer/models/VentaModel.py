@@ -38,7 +38,7 @@ class VentaModel(Base):
 
     usuario_id = Column(
         UUID(as_uuid=True) , 
-        ForeignKey("usuario.id_usuario") ,
+        ForeignKey("usuario.id_usuario" , ondelete="CASCADE") ,
         name="usuario_id" ,
         nullable=False , 
     )
@@ -46,4 +46,10 @@ class VentaModel(Base):
         "UsuarioModel" , 
         back_populates="venta" , 
         uselist=False
+    )
+
+    comprobante = relationship(
+        "ComprobanteModel" , 
+        back_populates="venta",
+        cascade="all, delete"
     )

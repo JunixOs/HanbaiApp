@@ -1,4 +1,5 @@
 from src.data_access_layer.base import Base
+from flask_login import UserMixin
 
 import uuid
 from sqlalchemy import (
@@ -7,7 +8,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import validates , relationship
 
-class UsuarioModel(Base):
+class UsuarioModel(Base , UserMixin):
     __tablename__ = "usuario"
 
     id_usuario = Column(
@@ -72,7 +73,8 @@ class UsuarioModel(Base):
     # Atributo python para obtener VentaModel asociado
     venta = relationship(
         "VentaModel" , 
-        back_populates="usuario"
+        back_populates="usuario" , 
+        cascade="all, delete"
     )
 
     __table_args__ = (

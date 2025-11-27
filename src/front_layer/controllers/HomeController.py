@@ -7,11 +7,10 @@ from flask import render_template , Blueprint
 
 # Siempre construye la ruta desde la raiz del proyecto sin un "/" inicial
 template_dir = os.path.abspath("src/front_layer/templates")
-print(template_dir)
 
 # Para trabajar por modulos puedo hacer esto
-home = Blueprint('home' , __name__ , template_folder=template_dir)
+home_controller = Blueprint('home' , __name__ , template_folder=template_dir)
 
-@home.route("/")
+@home_controller.route("/")
 def ShowHome():
     return render_template("home.html")

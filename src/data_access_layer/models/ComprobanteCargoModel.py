@@ -11,13 +11,13 @@ comprobante_cargo = Table(
     Column(
         "comprobante_id" , 
         UUID(as_uuid=True) , 
-        ForeignKey("comprobante.id_comprobante") , 
+        ForeignKey("comprobante.id_comprobante" , ondelete="CASCADE") , 
         primary_key=True
     ) , 
     Column(
         "cargo_id" , 
         UUID(as_uuid=True) , 
-        ForeignKey("cargo.id_cargo") , 
+        ForeignKey("cargo.id_cargo" , ondelete="CASCADE") , 
         primary_key=True
     )
 )

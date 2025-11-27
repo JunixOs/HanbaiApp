@@ -53,5 +53,6 @@ class CargoModel(Base):
     comprobante = relationship(
         "ComprobanteModel" , 
         secondary=comprobante_cargo , 
-        back_populates="cargo"
+        back_populates="cargo",
+        passive_deletes=True
     )
