@@ -1,44 +1,54 @@
+import os
+from datetime import datetime
+
+from flask import (
+    render_template, Blueprint, request, redirect, url_for, flash
+)
+from flask_login import login_required, current_user, logout_user
+
+# Importaciones de tus servicios y modelos
 from src.builders.BuildUsuarioService import BuildUsuarioService
 from src.builders.BuildRolService import BuildRolService
 from src.front_layer.controllers.AuthByRol import roles_required
 from src.bussines_layer.models.UsuarioDomainEntity import UsuarioDomainEntity
 
-import os
-from datetime import datetime
-
-from flask import (
-    render_template , Blueprint , request , redirect , url_for , flash
-)
-from flask_login import login_required , current_user , logout_user
-
+# Configuración del Blueprint
 template_dir = os.path.abspath("src/front_layer/templates")
-usuario_controller = Blueprint('usuario' , __name__ , template_folder=template_dir)
+usuario_controller = Blueprint('usuario', __name__, template_folder=template_dir)
 
 # ########################### AUTENTICACION ###########################
-@usuario_controller.route("/logout")
-@login_required
-def LogoutUsuario():
-    logout_user()
-    return render_template("home.html")
+
+@usuario_controller.get("/login")
+def LoginPage():
+    """Muestra el formulario de login."""
+    if current_user.is_authenticated:
+        return redirect(url_for("usuario.Dashboard"))
+    return render_template("module_gestion_usuarios/login.html")
 
 @usuario_controller.post("/login")
 def LoginUsuario():
+    """Procesa los datos del login."""
     correo = request.form["correo"]
     password = request.form["password"]
 
     usuario_service = BuildUsuarioService.build()
+    usuario_login_message = usuario_service.IniciarSesion(password, correo)
 
-    usuario_login_message = usuario_service.IniciarSesion(password , correo)
-
-    if(usuario_login_message is not None):
-        return redirect("/login")
+    if usuario_login_message == "Sesion iniciada con exito":
+        return redirect(url_for("usuario.Dashboard"))
     else:
-        flash(usuario_login_message , "message")
-        return redirect(url_for("Dashboard"))
-    
-# ########################### AUTENTICACION ###########################
+        flash(usuario_login_message, "error")
+        return redirect(url_for("usuario.LoginPage"))
 
-# ########################### CARGA DE PAGINAS PRINCIPALES ###########################
+@usuario_controller.route("/logout")
+@login_required
+def LogoutUsuario():
+    """Cierra la sesión del usuario."""
+    logout_user()
+    return redirect(url_for("home.ShowHome"))
+
+# ########################### PÁGINAS PÚBLICAS ###########################
+
 @usuario_controller.get("/contactar-soporte")
 def ContactarSoporte():
     return render_template("ContactarSoporte.html")
@@ -46,53 +56,45 @@ def ContactarSoporte():
 @usuario_controller.get("/sobre-nosotros")
 def SobreNosotros():
     return render_template("SobreNosotros.html")
-# ########################### CARGA DE PAGINAS PRINCIPALES ###########################
 
-# ########################### INFORMACION PARA CARGAR PAGINAS ###########################
+# ########################### DASHBOARD Y GESTIÓN ###########################
+
 @usuario_controller.get("/dashboard")
 @login_required
 def Dashboard():
-    if(current_user.is_authenticated):
+    """Muestra el panel principal del usuario."""
+    nombre = current_user.nombre
+    correo = current_user.correo
+    rol = current_user.rol.nombre if current_user.rol else "Sin Rol"
 
-        nombre = current_user.nombre
-        correo = current_user.correo
-        rol = current_user.rol.nombre if current_user.rol else None
+    return render_template(
+        "module_gestion_usuarios/Dashboard.html",
+        nombre=nombre,
+        correo=correo,
+        rol=rol
+    )
 
-        return render_template(
-            "Dashboard.html" , 
-            nombre=nombre ,
-            correo=correo,
-            rol=rol
-        )
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
 @usuario_controller.get("/usuarios")
 @roles_required("ADMINISTRADOR")
 def VerTodosLosUsuarios():
-    if(current_user.is_authenticated):
-        usuario_service = BuildUsuarioService.build()
+    """Lista todos los usuarios (Solo Admin)."""
+    usuario_service = BuildUsuarioService.build()
+    list_usuarios = usuario_service.VerTodosLosUsuarios()
 
-        list_usuarios = usuario_service.VerTodosLosUsuarios()
+    return render_template(
+        "module_gestion_usuarios/VerUsuarios.html",
+        usuarios=list_usuarios
+    )
 
-        return render_template(
-            "module_gestion_usuarios/VerUsuarios.html" , 
-            usuarios=list_usuarios
-        )
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
-# ########################### INFORMACION PARA CARGAR PAGINAS ###########################
+# ########################### REGISTRO ###########################
 
-# ########################### REGISTRAR USUARIO COMO CLIENTE ###########################
-@usuario_controller.post("registrar/cliente")
+@usuario_controller.post("/registrar/cliente")
 def RegistrarUsuarioComoClientePost():
-
+    """Registro público de clientes."""
     rol_service = BuildRolService.build()
     usuario_service = BuildUsuarioService.build()
 
     rol_domain_entity = rol_service.ObtenerRolPorNombre(rol_name="CLIENTE")
-
     usuario_domain_entity = UsuarioDomainEntity()
     now_timestamp = datetime.now().timestamp()
 
@@ -102,209 +104,151 @@ def RegistrarUsuarioComoClientePost():
     usuario_domain_entity.dni = request.form["dni"]
     usuario_domain_entity.creado_en = now_timestamp
     usuario_domain_entity.actualizado_en = now_timestamp
-    usuario_domain_entity.rol_id = rol_domain_entity.id_rol
+    
+    if rol_domain_entity:
+        usuario_domain_entity.rol_id = rol_domain_entity.id_rol
+        usuario_service.RegistrarUsuario(usuario_domain_entity)
+        flash("Usuario registrado con éxito", "success")
+    else:
+        flash("Error: Rol CLIENTE no encontrado", "error")
 
-    usuario_service.RegistrarUsuario(usuario_domain_entity)
+    return redirect(url_for("usuario.LoginPage"))
 
-    flash("Usuario registrado con exito" , "message")
-    return redirect("module_gestion_usuarios/login.html")
-
-# ########################### REGISTRAR USUARIO COMO CLIENTE ###########################
-
-# ########################### REGISTRAR USUARIO (ADMIN) ###########################
 @usuario_controller.get("/registrar")
 @roles_required("ADMINISTRADOR")
 def RegistrarUsuarioGet():
-    if(current_user.is_authenticated):
+    """Muestra formulario para crear usuario (Admin)."""
+    rol_service = BuildRolService.build()
+    list_roles = rol_service.VerTodosLosRoles()
 
-        rol_service = BuildRolService.build()
-
-        list_roles = rol_service.VerTodosLosRoles()
-
-        return render_template(
-            "module_gestion_usuarios/RegistrarUsuarios.html" , 
-            roles = list_roles
-        )
-    else:
-        return render_template("module_gestion_usuarios/login.html")
+    return render_template(
+        "module_gestion_usuarios/RegistrarUsuarios.html",
+        roles=list_roles
+    )
 
 @usuario_controller.post("/registrar")
 @roles_required("ADMINISTRADOR")
 def RegistrarUsuarioPost():
-    if(current_user.is_authenticated):
-        usuario_service = BuildUsuarioService.build()
+    """Procesa creación de usuario (Admin)."""
+    usuario_service = BuildUsuarioService.build()
+    now_timestamp = datetime.now().timestamp()
+    usuario = UsuarioDomainEntity()
 
-        now_timestamp = datetime.now().timestamp()
+    usuario.correo = request.form["correo"]
+    usuario.nombre = request.form["nombre"]
+    usuario.password_hash = request.form["password"]
+    usuario.dni = request.form["dni"]
+    usuario.creado_en = now_timestamp
+    usuario.actualizado_en = now_timestamp
+    usuario.rol_id = request.form["rol_id"]
 
-        usuario_domain_entity = UsuarioDomainEntity()
+    try:
+        usuario_service.RegistrarUsuario(usuario)
+        flash("Usuario registrado con éxito", "success")
+    except Exception as e:
+        flash(f"Error en el registro: {str(e)}", "error")
+    
+    return redirect(url_for("usuario.VerTodosLosUsuarios"))
 
-        usuario_domain_entity.correo = request.form["correo"]
-        usuario_domain_entity.nombre = request.form["nombre"]
-        usuario_domain_entity.password_hash = request.form["password"]
-        usuario_domain_entity.dni = request.form["dni"]
-        usuario_domain_entity.creado_en = now_timestamp
-        usuario_domain_entity.actualizado_en = now_timestamp
-        usuario_domain_entity.rol_id = request.form["rol_id"]
+# ########################### EDICIÓN DE PERFIL (Usuario) ###########################
 
-        try:
-            usuario_service.RegistrarUsuario(
-                usuario_domain_entity
-            )
-        except Exception:
-            flash("Algo salio mal en el registro" , "message")
-        else:
-            flash("Usuario registrado con exito" , "message")
-        
-        return redirect("module_gestion_usuarios/VerUsuarios.html")        
-
-    else:
-        return redirect("module_gestion_usuarios/login.html")
-# ########################### REGISTRAR USUARIO (ADMIN) ###########################
-
-# ########################### EDITAR INFORMACION DE CUENTA ###########################
 @usuario_controller.get("/editar")
 @login_required
 def EditarInformacionGet():
-    if(current_user.is_authenticated):
-        id_usuario = current_user.id_usuario
-
-        if(id_usuario is None):
-            return render_template("module_gestion_usuarios/login.html")
-
-        usuario_service = BuildUsuarioService.build()
-        rol_service = BuildRolService.build()
-
-        usuario_domain = usuario_service.ObtenerUsuarioPorId(id_usuario)
-
-        usuario_domain.password_hash = ""
-        usuario_domain.id_usuario = ""
-        
-        rol_name = rol_service.ObtenerRolPorId(usuario_domain.rol_id).nombre
-
-        usuario_domain.rol_id = ""
-
-        return render_template(
-            "module_gestion_usuarios/EditarUsuario.html" , 
-            usuario=usuario_domain , 
-            rol_name = rol_name
-        )
-
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
-@usuario_controller.put("/editar")
-@login_required
-def EditarInformacionPut():
-    if(current_user.is_authenticated):
-
-        now_timestamp = datetime.now().timestamp()
-        usuario_service = BuildUsuarioService.build()
-
-        usuario_domain_entity = UsuarioDomainEntity()
-
-        usuario_domain_entity.correo = request.form["correo"]
-        usuario_domain_entity.nombre = request.form["nombre"]
-        usuario_domain_entity.password_hash = request.form["password"]
-        usuario_domain_entity.dni = request.form["dni"]
-        usuario_domain_entity.actualizado_en = now_timestamp
-
-        resultado_editar = usuario_service.EditarUsuario(usuario_domain_entity)
-
-        if(resultado_editar):
-            message = "No se pudo editar la informacion."
-        else:
-            message = "Informacion actualizada con exito."
-        
-        return render_template(
-            "module_gestion_usuarios/Dashboard.html" , 
-            message=message
-        )
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
-# ########################### EDITAR INFORMACION DE CUENTA ###########################
-
-# ########################### EDITAR USUARIOS (ADMIN) ###########################
-@usuario_controller.get("/editar-usuario/<str:id_usuario>")
-@roles_required("ADMINISTRADOR")
-def EditarUsuarioGet(id_usuario):
-    if(current_user.is_authenticated):
-        usuario_service = BuildUsuarioService.build()
-        rol_service = BuildRolService.build()
-
-        if(id_usuario is None):
-            return render_template("module_gestion_usuarios/VerUsuarios.html")
-        
-
-        usuario_domain = usuario_service.ObtenerUsuarioPorId(id_usuario)
-
-        usuario_domain.password_hash = ""
-        usuario_domain.id_usuario = ""
-
-        list_roles = rol_service.VerTodosLosRoles()
-
-        return render_template(
-            "module_gestion_usuarios/EditarUsuario.html" , 
-            usuario = usuario_domain , 
-            roles = list_roles
-        )
-
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
-@usuario_controller.put("/editar-usuario")
-@roles_required("ADMINISTRADOR")
-def EditarUsuarioPut():
-    if(current_user.is_authenticated):
-
-        now_timestamp = datetime.now().timestamp()
-        usuario_service = BuildUsuarioService.build()
-
-        usuario_domain_entity = UsuarioDomainEntity()
-
-        usuario_domain_entity.correo = request.form["correo"]
-        usuario_domain_entity.nombre = request.form["nombre"]
-        usuario_domain_entity.password_hash = request.form["password"]
-        usuario_domain_entity.dni = request.form["dni"]
-        usuario_domain_entity.actualizado_en = now_timestamp
-        usuario_domain_entity.rol_id = request.form["rol_id"]
-
-        resultado_editar = usuario_service.EditarUsuario(usuario_domain_entity)
-
-        if(resultado_editar):
-            message = "No se pudo editar la informacion."
-        else:
-            message = "Informacion actualizada con exito."
-        
-        return render_template(
-            "module_gestion_usuarios/VerUsuarios.html" , 
-            message=message
-        )
-
-    else:
-        return render_template("module_gestion_usuarios/login.html")
-    
-# ########################### EDITAR USUARIOS (ADMIN) ###########################
-
-# ########################### ELIMINAR CUENTA ###########################
-@usuario_controller.delete("/eliminar")
-@login_required
-def EliminarCuenta():
-    usuario_service = BuildUsuarioService.build()
-
+    """Muestra formulario para editar perfil propio."""
     id_usuario = current_user.id_usuario
+    usuario_service = BuildUsuarioService.build()
+    rol_service = BuildRolService.build()
 
-    logout_user()
-
-    resultado_eliminacion = usuario_service.EliminarUsuario(id_usuario)
-
-    if(resultado_eliminacion):
-        message = "Eliminacion correcta"
-    else:
-        message = "Eliminacion fallida"
+    usuario_domain = usuario_service.ObtenerUsuarioPorId(id_usuario)
+    usuario_domain.password_hash = "" # Ocultar pass
+    
+    rol_obj = rol_service.ObtenerRolPorId(usuario_domain.rol_id)
+    rol_name = rol_obj.nombre if rol_obj else "N/A"
 
     return render_template(
-        "home.html" , 
-        message=message
+        "module_gestion_usuarios/EditarUsuario.html",
+        usuario=usuario_domain,
+        rol_name=rol_name
     )
-# ########################### ELIMINAR CUENTA ###########################
+
+@usuario_controller.post("/editar") # Usamos POST para el form
+@login_required
+def EditarInformacionPost():
+    """Procesa edición de perfil propio."""
+    usuario_service = BuildUsuarioService.build()
+    usuario = UsuarioDomainEntity()
+    
+    usuario.id_usuario = current_user.id_usuario # Importante: ID del usuario logueado
+    usuario.correo = request.form["correo"]
+    usuario.nombre = request.form["nombre"]
+    usuario.password_hash = request.form.get("password", "")
+    usuario.dni = request.form["dni"]
+    usuario.actualizado_en = datetime.now().timestamp()
+
+    if usuario_service.EditarUsuario(usuario):
+        flash("Información actualizada con éxito", "success")
+    else:
+        flash("No se pudo actualizar la información", "error")
+        
+    return redirect(url_for("usuario.Dashboard"))
+
+# ########################### GESTIÓN DE USUARIOS (Admin) ###########################
+
+@usuario_controller.get("/editar-usuario/<string:id_usuario>")
+@roles_required("ADMINISTRADOR")
+def EditarUsuarioAdminGet(id_usuario):
+    """Muestra formulario para editar otro usuario (Admin)."""
+    usuario_service = BuildUsuarioService.build()
+    rol_service = BuildRolService.build()
+
+    usuario_domain = usuario_service.ObtenerUsuarioPorId(id_usuario)
+    usuario_domain.password_hash = ""
+    list_roles = rol_service.VerTodosLosRoles()
+
+    return render_template(
+        "module_gestion_usuarios/EditarUsuario.html",
+        usuario=usuario_domain,
+        roles=list_roles
+    )
+
+@usuario_controller.post("/editar-usuario")
+@roles_required("ADMINISTRADOR")
+def EditarUsuarioAdminPost():
+    """Procesa edición de otro usuario (Admin)."""
+    usuario_service = BuildUsuarioService.build()
+    usuario = UsuarioDomainEntity()
+    
+    # Necesitas pasar el ID del usuario a editar en un campo oculto en el HTML
+    # o extraerlo de alguna manera. Asumiré que viene en el form.
+    # Si no, ajusta tu HTML para incluir <input type="hidden" name="id_usuario" value="...">
+    usuario.id_usuario = request.form.get("id_usuario") 
+    
+    usuario.correo = request.form["correo"]
+    usuario.nombre = request.form["nombre"]
+    usuario.password_hash = request.form.get("password", "")
+    usuario.dni = request.form["dni"]
+    usuario.actualizado_en = datetime.now().timestamp()
+    usuario.rol_id = request.form["rol_id"]
+
+    if usuario_service.EditarUsuario(usuario):
+        flash("Usuario actualizado correctamente", "success")
+    else:
+        flash("Error al actualizar usuario", "error")
+        
+    return redirect(url_for("usuario.VerTodosLosUsuarios"))
+
+@usuario_controller.post("/eliminar") # Usamos POST para eliminar
+@login_required
+def EliminarCuenta():
+    """Elimina la cuenta propia."""
+    usuario_service = BuildUsuarioService.build()
+    id_usuario = current_user.id_usuario
+    logout_user()
+    
+    if usuario_service.EliminarUsuario(id_usuario):
+        flash("Cuenta eliminada correctamente", "success")
+    else:
+        flash("Error al eliminar la cuenta", "error")
+
+    return redirect(url_for("home.ShowHome"))

@@ -6,9 +6,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 
-load_dotenv()
+# --- CORRECCIÓN DE RUTA .ENV ---
+# Calculamos la ruta absoluta a la raíz del proyecto
+# Estructura: raiz/src/data_access_layer/session.py
+# Necesitamos subir 3 niveles para llegar a la raiz
+basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+env_file = os.path.join(basedir, '.env_db')
+
+# Cargamos explícitamente esa ruta
+load_dotenv(env_file)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Validación de seguridad
+if not DATABASE_URL:
+    raise ValueError(f"❌ ERROR CRÍTICO: No se encontró la variable DATABASE_URL.\n   Se buscó el archivo .env en: {env_file}")
+# -------------------------------
 
 engine = create_engine(
     DATABASE_URL , # type: ignore
@@ -16,12 +29,10 @@ engine = create_engine(
 )
 
 # Aquí Session no es una sesión concreta, sino una factoría de sesiones.
-# Cada vez que haces session = Session(), obtienes una instancia de sqlalchemy.orm.Session que puedes usar para .query(), .add(), .commit(), etc.
 LocalSession = sessionmaker(
     autoflush=False,
     bind=engine
 )
-# Crear sesión
 
 @contextmanager
 def get_db_session():
@@ -29,15 +40,8 @@ def get_db_session():
     try:
         yield session
         session.commit()
-    except:
+    except Exception as e:
         session.rollback()
-        raise
+        raise e
     finally:
         session.close()
-
-# Ejemplo: consulta
-# from src.models import UsuarioModel  # ejemplo
-
-# with get_db_session() as db:
-#     usuario = db.query(UsuarioModel).first()
-#     print(usuario.nombre)

@@ -1,6 +1,7 @@
 from src.data_access_layer.base import Base
 from src.data_access_layer.models.ComprobanteProductoModel import comprobante_producto
 from src.data_access_layer.models.ComprobanteModel import ComprobanteModel 
+from src.data_access_layer.models.CategoriaModel import CategoriaModel
 # --------------------------
 
 import uuid

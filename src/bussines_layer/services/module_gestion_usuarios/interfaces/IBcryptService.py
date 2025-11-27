@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 
 class IBcryptService(ABC):
 
-    @abstractmethod
-    @staticmethod
+    @staticmethod       
+    @abstractmethod     
     def HashPassword(plain_password: str) -> str:
         pass
 
-    @abstractmethod
-    @staticmethod
+    @staticmethod       
+    @abstractmethod     
     def CheckPassword(plain_password: str , hashed_password: str) -> bool:
         pass

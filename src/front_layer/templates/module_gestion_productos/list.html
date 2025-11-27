@@ -1,8 +1,8 @@
-{% extends "products/base.html" %}
+{% extends "module_gestion_productos/base.html" %}
 {% block title %}Lista de Productos - HanbaiApp{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='products/css/list.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/list.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
         <div class="breadcrumb-text">Inventario</div>
         <h1 class="page-title">Gestión de Productos</h1>
     </div>
-    <a href="{{ url_for('products.create') }}" class="btn-primary">
+    <a href="{{ url_for('producto.create') }}" class="btn-primary">
         <i class="fas fa-plus"></i>
         <span>Nuevo Producto</span>
     </a>
@@ -24,7 +24,7 @@
     
     <!-- BARRA DE BÚSQUEDA -->
     <div class="toolbar">
-        <form action="{{ url_for('products.index') }}" method="GET" class="search-form">
+        <form action="{{ url_for('producto.index') }}" method="GET" class="search-form">
             <input 
                 type="text" 
                 name="q" 
@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for p in productos %}
+            {% for p in Productos %}
             <tr>
                 <!-- COLUMNA: Producto -->
                 <td>
@@ -83,7 +83,7 @@
                 
                 <!-- COLUMNA: Acciones -->
                 <td class="text-end">
-                    <a href="{{ url_for('products.edit', id=p.id_producto) }}" class="btn-action" title="Editar">
+                    <a href="{{ url_for('producto.edit', id=p.id_producto) }}" class="btn-action" title="Editar">
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>

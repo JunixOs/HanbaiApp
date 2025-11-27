@@ -5,12 +5,12 @@ from abc import ABC, abstractmethod
 
 
 class IRolMapper(ABC):
-    @abstractmethod
-    @staticmethod
+    @staticmethod       
+    @abstractmethod     
     def toORM(usuario_domain_etity: RolDomainEntity) -> RolModel:
         pass
 
-    @abstractmethod
-    @staticmethod
+    @staticmethod       
+    @abstractmethod     
     def toDomain(usuario_model: RolModel) -> RolDomainEntity:
         pass
