@@ -1,6 +1,8 @@
 from src.data_access_layer.base import Base
 from src.data_access_layer.models.ComprobanteProductoModel import comprobante_producto
 from src.data_access_layer.models.ComprobanteCargoModel import comprobante_cargo
+from src.data_access_layer.models.VentaModel import VentaModel
+from src.data_access_layer.models.CargoModel import CargoModel
 
 import uuid
 from sqlalchemy import (
@@ -27,11 +29,11 @@ class ComprobanteModel(Base):
         name="venta_id" , 
         nullable=False
     )
+    
     venta = relationship(
         "VentaModel" , 
         back_populates="comprobante"
     )
-    # Relacion con Venta
 
     total = Column(
         Numeric(14 , 5) , 

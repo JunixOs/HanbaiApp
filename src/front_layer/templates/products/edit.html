@@ -1,0 +1,103 @@
+{% extends "products/base.html" %}
+{% block title %}Editar Producto - HanbaiApp{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='products/css/edit.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER DE EDICIÓN -->
+<div class="edit-header">
+    <div class="edit-breadcrumb">
+        <a href="{{ url_for('products.index') }}">Inventario</a> / Editar Producto
+    </div>
+    <h1 class="edit-title">Editar Producto</h1>
+</div>
+
+<!-- FORMULARIO DE EDICIÓN -->
+<div class="edit-card">
+    <h3 class="edit-section-title">Información del Producto</h3>
+    
+    <form action="{{ url_for('products.edit', id=producto.id_producto) }}" method="POST">
+        
+        <!-- NOMBRE DEL PRODUCTO -->
+        <div class="form-group">
+            <label class="form-label">Nombre del Producto *</label>
+            <input 
+                type="text" 
+                class="form-control" 
+                name="nombre" 
+                value="{{ producto.nombre }}" 
+                required
+            >
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea 
+                class="form-control" 
+                name="descripcion" 
+                rows="4"
+            >{{ producto.descripcion }}</textarea>
+        </div>
+
+        <!-- FILA: Categoría y Precio -->
+        <div class="row">
+            <!-- Categoría (solo lectura) -->
+            <div class="col-md-6">
+                <label class="form-label">Categoría</label>
+                <input 
+                    type="text" 
+                    class="form-control form-control-readonly" 
+                    value="{{ producto.categoria_id }}" 
+                    readonly
+                >
+                <div class="field-note">La categoría no se puede cambiar en esta vista.</div>
+            </div>
+            
+            <!-- Precio -->
+            <div class="col-md-6">
+                <label class="form-label">Precio (USD) *</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input 
+                        type="number" 
+                        step="0.01" 
+                        class="form-control" 
+                        name="precio" 
+                        value="{{ producto.precio }}" 
+                        required
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- STOCK -->
+        <div class="form-group">
+            <label class="form-label">Cantidad en Stock *</label>
+            <input 
+                type="number" 
+                class="form-control" 
+                name="stock" 
+                value="{{ producto.stock }}" 
+                required 
+                style="max-width: 200px;"
+            >
+        </div>
+
+        <!-- BOTONES -->
+        <div class="btn-actions">
+            <a href="{{ url_for('products.index') }}" class="btn-cancel">
+                Cancelar
+            </a>
+            <button type="submit" class="btn-update">
+                Guardar Cambios
+            </button>
+        </div>
+        
+    </form>
+</div>
+
+{% endblock %}

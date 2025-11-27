@@ -1,5 +1,6 @@
 from src.data_access_layer.base import Base
 from src.data_access_layer.models.RolReporteModel import rol_reporte
+from src.data_access_layer.models.ReporteModel import ReporteModel
 
 import uuid
 from sqlalchemy import (

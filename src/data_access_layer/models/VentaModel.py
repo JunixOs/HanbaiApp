@@ -1,4 +1,7 @@
 from src.data_access_layer.base import Base
+from src.data_access_layer.models.EstadoVentaModel import EstadoVentaModel
+from src.data_access_layer.models.UsuarioModel import UsuarioModel
+# -----------------------------------
 
 import uuid
 from sqlalchemy import (
@@ -30,6 +33,8 @@ class VentaModel(Base):
         name="estado_venta_id",
         nullable=False
     )
+    
+    # Ahora sí encontrará "EstadoVentaModel"
     estado_venta = relationship(
         "EstadoVentaModel" , 
         back_populates="venta" , 
@@ -42,6 +47,8 @@ class VentaModel(Base):
         name="usuario_id" ,
         nullable=False , 
     )
+    
+    # Ahora sí encontrará "UsuarioModel"
     usuario = relationship(
         "UsuarioModel" , 
         back_populates="venta" , 
@@ -51,5 +58,6 @@ class VentaModel(Base):
     comprobante = relationship(
         "ComprobanteModel" , 
         back_populates="venta",
-        cascade="all, delete"
+        cascade="all, delete",
+        uselist=False
     )
