@@ -8,10 +8,8 @@ class ProductoService:
         self.mapper = mapper
 
     def obtener_todos(self, busqueda=None):
-        if busqueda:
-            models = self.repository.search(busqueda)
-        else:
-            models = self.repository.findAll()
+        models = self.repository.findAll()
+        
         return [self.mapper.toDomain(m) for m in models]
 
     def obtener_por_id(self, id_producto):

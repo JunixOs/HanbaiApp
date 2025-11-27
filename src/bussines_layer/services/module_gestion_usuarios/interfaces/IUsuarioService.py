@@ -1,7 +1,7 @@
 from src.bussines_layer.models.UsuarioDomainEntity import UsuarioDomainEntity
 
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List , Tuple
 
 class IUsuarioService(ABC):
     
@@ -10,7 +10,7 @@ class IUsuarioService(ABC):
         pass
 
     @abstractmethod
-    def IniciarSesion(self , password: str , correo: str) -> str:
+    def IniciarSesion(self , password: str , correo: str) -> Tuple[str , bool]:
         pass
 
     @abstractmethod

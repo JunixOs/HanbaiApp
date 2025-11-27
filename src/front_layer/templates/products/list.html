@@ -13,10 +13,18 @@
         <div class="breadcrumb-text">Inventario</div>
         <h1 class="page-title">Gestión de Productos</h1>
     </div>
-    <a href="{{ url_for('products.create') }}" class="btn-primary">
-        <i class="fas fa-plus"></i>
-        <span>Nuevo Producto</span>
-    </a>
+
+    {% if rol_name == 'encargado_de_tienda' %}
+        <a href="{{ url_for('products.create') }}" class="btn-primary">
+            <i class="fas fa-plus"></i>
+            <span>Nuevo Producto</span>
+        </a>
+        <a href="" class="btn-primary">
+            <i class="fas fa-plus"></i>
+            <span>Nueva Categoria de Producto</span>
+        </a>
+    {% endif %}
+
 </div>
 
 <!-- TARJETA CON TABLA -->
@@ -44,7 +52,9 @@
                 <th>Categoría</th>
                 <th>Precio</th>
                 <th>Stock</th>
-                <th class="text-end">Acciones</th>
+                {% if rol_name in ['administrador' , 'encargado_de_tienda'] %}
+                    <th class="text-end">Acciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -82,11 +92,13 @@
                 </td>
                 
                 <!-- COLUMNA: Acciones -->
-                <td class="text-end">
-                    <a href="{{ url_for('products.edit', id=p.id_producto) }}" class="btn-action" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                </td>
+                {% if rol_name in ['administrador' 'encargado_de_tienda'] %}
+                    <td class="text-end">
+                        <a href="{{ url_for('products.edit', id=p.id_producto) }}" class="btn-action" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                {% endif %}
             </tr>
             {% else %}
             <!-- ESTADO VACÍO -->

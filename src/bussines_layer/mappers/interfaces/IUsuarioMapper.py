@@ -6,12 +6,12 @@ from abc import ABC, abstractmethod
 
 class IUsuarioMapper(ABC):
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def toORM(usuario_domain_entity: UsuarioDomainEntity) -> UsuarioModel:
         pass
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def toDomain(usuario_model: UsuarioModel) -> UsuarioDomainEntity:
         pass

@@ -28,10 +28,12 @@
 
         <div class="user-profile">
             <div class="user-avatar">A</div>
-            <div class="user-info">
-                <h6>Admin Name</h6>
-                <span>Administrador</span>
-            </div>
+            {% if user_name and rol_name %}
+                <div class="user-info">
+                    <h6>{{ user_name }}</h6>
+                    <span>{{ rol_name }}</span>
+                </div>
+            {% endif %}
         </div>
 
         <nav class="nav-menu">
@@ -52,11 +54,14 @@
             </a>
         </nav>
 
-        <div class="sidebar-footer">
-            <a href="#" class="nav-link logout-link">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </a>
-        </div>
+        {% if authenticated %}
+            <div class="sidebar-footer">
+                <a href="{{ url_for('usuario.LogoutUsuario') }}" class="nav-link logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </a>
+            </div>
+        {% endif %}
+
     </aside>
 
     <!-- MAIN CONTENT -->

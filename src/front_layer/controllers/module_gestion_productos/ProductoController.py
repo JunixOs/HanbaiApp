@@ -3,9 +3,13 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from src.data_access_layer.session import get_db_session
 from src.data_access_layer.repositories.ProductoRepository import ProductoRepository
 from src.bussines_layer.mappers.ProductoMapper import ProductoMapper
-from src.bussines_layer.services.ProductoService import ProductoService
+from src.bussines_layer.services.module_gestion_productos.ProductoService import ProductoService
 # Necesitarás esto para cargar categorías en los select
 from src.data_access_layer.models.CategoriaModel import CategoriaModel 
+
+from src.front_layer.controllers.AuthByRol import roles_required
+
+from flask_login import current_user
 
 template_dir = os.path.abspath("src/front_layer/templates/products")
 products_bp = Blueprint('products', __name__, template_folder=template_dir)
@@ -19,9 +23,25 @@ def index():
         service = ProductoService(repo, mapper)
         
         productos = service.obtener_todos(busqueda)
-        return render_template("list.html", productos=productos)
+
+        rol_name = None
+        user_name = None
+        authenticated = False
+        if(current_user.is_authenticated):
+            rol_name = current_user.rol_name.strip().lower()
+            authenticated = current_user.is_authenticated
+            user_name = current_user.nombre
+
+        return render_template(
+            "list.html", 
+            productos=productos , 
+            rol_name = rol_name , 
+            user_name = user_name , 
+            authenticated = authenticated
+        )
 
 @products_bp.route("/create", methods=['GET', 'POST'])
+@roles_required("ENCARGADO_DE_TIENDA")
 def create():
     with get_db_session() as session:
         repo = ProductoRepository(session)
@@ -44,6 +64,7 @@ def create():
         return render_template("create.html", categorias=categorias)
 
 @products_bp.route("/edit/<id>", methods=['GET', 'POST'])
+@roles_required("ENCARGADO_DE_TIENDA")
 def edit(id):
     with get_db_session() as session:
         repo = ProductoRepository(session)

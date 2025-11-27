@@ -30,5 +30,5 @@ class UsuarioRepository(IUsuarioRepository):
     def save(self , usuario_model: UsuarioModel) -> None:
         self.__session_local_hanbai_db.add(usuario_model)
 
-    def findByCorreo(self , correo: str) -> UsuarioModel:
+    def findByCorreo(self , correo: str) -> UsuarioModel | None:
         return self.__session_local_hanbai_db.query(UsuarioModel).filter_by(correo = correo).first()

@@ -11,6 +11,16 @@
     <!-- dentro escribimos el nombre del Blueprint y seguido el nombre de la funcion -->
     <!-- Si el metodo viene del app.py entonces solo escribimos el nombre de la funcion -->
     <!-- ya que se interpretara que estamos haciendo referencia a app.py -->
-    <a href="{{ url_for('users.ShowUserHome')}}">Ir a usuarios</a>
+    <a href="{{ url_for('products.index')}}">Ir a productos</a>
+    
+    {% if not authenticated %}
+        <a href="{{ url_for('usuario.LoginUsuarioGet')}}">Iniciar Sesion</a>
+        <a href="{{ url_for('usuario.RegistrarUsuarioComoClienteGet')}}">Registrarse</a>
+    {% endif %}
+
+    {% if authenticated %}
+        <a href="{{ url_for('usuario.LogoutUsuario')}}">Cerrar Sesion</a>
+    {% endif %}
+
 </body>
 </html>

@@ -22,7 +22,7 @@ class IUsuarioRepository(ABC):
         pass
 
     @abstractmethod
-    def findByCorreo(self, correo: str) -> UsuarioModel:
+    def findByCorreo(self, correo: str) -> UsuarioModel | None:
         pass
 
     # Actualizar datos

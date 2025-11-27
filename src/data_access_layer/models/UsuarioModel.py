@@ -88,3 +88,7 @@ class UsuarioModel(Base , UserMixin):
         if not re.match(patron, email):
             raise ValueError("Email inválido")
         return email
+    
+    def get_id(self):
+        # Flask-Login usará esto como el identificador del usuario
+        return str(self.id_usuario)

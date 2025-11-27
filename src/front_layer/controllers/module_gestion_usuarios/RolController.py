@@ -63,7 +63,7 @@ def CrearRol():
         return render_template("module_gestion_usuarios/login.html")
 
 
-@rol_controller.get("/editar/<str:id_rol>")
+@rol_controller.get("/editar/<string:id_rol>")
 @roles_required("ADMINISTRADOR")
 def EditarRolGet(id_rol: str):
     if(current_user.is_authenticated):
@@ -82,7 +82,7 @@ def EditarRolGet(id_rol: str):
     else:
         return render_template("module_gestion_usuarios/login.html")
     
-@rol_controller.put("/editar/<str:id_rol>")
+@rol_controller.put("/editar/<string:id_rol>")
 @roles_required("ADMINISTRADOR")
 def EditarRolPut(id_rol: str):
     if(current_user.is_authenticated):
@@ -103,7 +103,7 @@ def EditarRolPut(id_rol: str):
     else:
         return render_template("module_gestion_usuarios/login.html")
     
-@rol_controller.delete("/eliminar/<str:id_rol>")
+@rol_controller.delete("/eliminar/<string:id_rol>")
 @roles_required("ADMINISTRADOR")
 def EliminarRolPost(id_rol: str):
     if(current_user.is_authenticated):

@@ -21,20 +21,27 @@ def LogoutUsuario():
     logout_user()
     return render_template("home.html")
 
+@usuario_controller.route("/login")
+def LoginUsuarioGet():
+    return render_template("module_gestion_usuarios/login.html")
+
 @usuario_controller.post("/login")
-def LoginUsuario():
+def LoginUsuarioPost():
+    if(current_user.is_authenticated):
+        return redirect(url_for("home.ShowHome"))
+
     correo = request.form["correo"]
     password = request.form["password"]
 
     usuario_service = BuildUsuarioService.build()
 
-    usuario_login_message = usuario_service.IniciarSesion(password , correo)
+    usuario_login_message , status = usuario_service.IniciarSesion(password , correo)
 
-    if(usuario_login_message is not None):
-        return redirect("/login")
+    flash(usuario_login_message , "message")
+    if(not status):
+        return redirect(url_for("usuario.LoginUsuarioGet"))
     else:
-        flash(usuario_login_message , "message")
-        return redirect(url_for("Dashboard"))
+        return redirect(url_for("products.index"))
     
 # ########################### AUTENTICACION ###########################
 
@@ -85,6 +92,10 @@ def VerTodosLosUsuarios():
 # ########################### INFORMACION PARA CARGAR PAGINAS ###########################
 
 # ########################### REGISTRAR USUARIO COMO CLIENTE ###########################
+@usuario_controller.get("/registrar/cliente")
+def RegistrarUsuarioComoClienteGet():
+    return render_template("module_gestion_usuarios/RegistrarUsuarioComoCliente.html")
+
 @usuario_controller.post("registrar/cliente")
 def RegistrarUsuarioComoClientePost():
 
@@ -225,7 +236,7 @@ def EditarInformacionPut():
 # ########################### EDITAR INFORMACION DE CUENTA ###########################
 
 # ########################### EDITAR USUARIOS (ADMIN) ###########################
-@usuario_controller.get("/editar-usuario/<str:id_usuario>")
+@usuario_controller.get("/editar-usuario/<string:id_usuario>")
 @roles_required("ADMINISTRADOR")
 def EditarUsuarioGet(id_usuario):
     if(current_user.is_authenticated):
