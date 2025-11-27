@@ -38,7 +38,7 @@ def LoginUsuario():
     
 # ########################### AUTENTICACION ###########################
 
-# ########################### CARGA DE PAGINAS ###########################
+# ########################### CARGA DE PAGINAS PRINCIPALES ###########################
 @usuario_controller.get("/contactar-soporte")
 def ContactarSoporte():
     return render_template("ContactarSoporte.html")
@@ -46,6 +46,7 @@ def ContactarSoporte():
 @usuario_controller.get("/sobre-nosotros")
 def SobreNosotros():
     return render_template("SobreNosotros.html")
+# ########################### CARGA DE PAGINAS PRINCIPALES ###########################
 
 # ########################### INFORMACION PARA CARGAR PAGINAS ###########################
 @usuario_controller.get("/dashboard")
@@ -82,6 +83,33 @@ def VerTodosLosUsuarios():
         return render_template("module_gestion_usuarios/login.html")
     
 # ########################### INFORMACION PARA CARGAR PAGINAS ###########################
+
+# ########################### REGISTRAR USUARIO COMO CLIENTE ###########################
+@usuario_controller.post("registrar/cliente")
+def RegistrarUsuarioComoClientePost():
+
+    rol_service = BuildRolService.build()
+    usuario_service = BuildUsuarioService.build()
+
+    rol_domain_entity = rol_service.ObtenerRolPorNombre(rol_name="CLIENTE")
+
+    usuario_domain_entity = UsuarioDomainEntity()
+    now_timestamp = datetime.now().timestamp()
+
+    usuario_domain_entity.nombre = request.form["nombre"]
+    usuario_domain_entity.correo = request.form["correo"]
+    usuario_domain_entity.password_hash = request.form["password"]
+    usuario_domain_entity.dni = request.form["dni"]
+    usuario_domain_entity.creado_en = now_timestamp
+    usuario_domain_entity.actualizado_en = now_timestamp
+    usuario_domain_entity.rol_id = rol_domain_entity.id_rol
+
+    usuario_service.RegistrarUsuario(usuario_domain_entity)
+
+    flash("Usuario registrado con exito" , "message")
+    return redirect("module_gestion_usuarios/login.html")
+
+# ########################### REGISTRAR USUARIO COMO CLIENTE ###########################
 
 # ########################### REGISTRAR USUARIO (ADMIN) ###########################
 @usuario_controller.get("/registrar")
@@ -164,9 +192,9 @@ def EditarInformacionGet():
     else:
         return render_template("module_gestion_usuarios/login.html")
     
-@usuario_controller.post("/editar")
+@usuario_controller.put("/editar")
 @login_required
-def EditarInformacionPost():
+def EditarInformacionPut():
     if(current_user.is_authenticated):
 
         now_timestamp = datetime.now().timestamp()
@@ -224,9 +252,9 @@ def EditarUsuarioGet(id_usuario):
     else:
         return render_template("module_gestion_usuarios/login.html")
     
-@usuario_controller.post("/editar-usuario")
+@usuario_controller.put("/editar-usuario")
 @roles_required("ADMINISTRADOR")
-def EditarUsuarioPost():
+def EditarUsuarioPut():
     if(current_user.is_authenticated):
 
         now_timestamp = datetime.now().timestamp()

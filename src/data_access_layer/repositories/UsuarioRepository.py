@@ -15,7 +15,7 @@ class UsuarioRepository(IUsuarioRepository):
     def findAll(self) -> List[UsuarioModel]:
         return self.__session_local_hanbai_db.query(UsuarioModel).all()
 
-    def findById(self , id_usuario: str) -> UsuarioModel:
+    def findById(self , id_usuario: str) -> UsuarioModel | None:
         return self.__session_local_hanbai_db.query(UsuarioModel).filter_by(correo = UUID(id_usuario)).first()
     
     def deleteById(self , id_usuario: str) -> None:

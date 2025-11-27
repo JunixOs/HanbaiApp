@@ -40,7 +40,8 @@ class CategoriaModel(Base):
 
     producto = relationship(
         "ProductoModel" , 
-        back_populates="categoria"
+        back_populates="categoria" , 
+        passive_deletes=True # Evita que se elimine a los productos al eliminar una categoria
     )
 
     __table_args__ = (

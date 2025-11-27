@@ -73,7 +73,8 @@ class UsuarioModel(Base , UserMixin):
     # Atributo python para obtener VentaModel asociado
     venta = relationship(
         "VentaModel" , 
-        back_populates="usuario"
+        back_populates="usuario" , 
+        cascade="all, delete"
     )
 
     __table_args__ = (

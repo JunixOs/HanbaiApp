@@ -11,13 +11,13 @@ rol_reporte = Table(
     Column(
         "reporte_id" , 
         UUID(as_uuid=True) , 
-        ForeignKey("reporte.id_reporte") , 
+        ForeignKey("reporte.id_reporte" , ondelete="CASCADE") , 
         primary_key=True
     ),
     Column(
         "rol_id" , 
         UUID(as_uuid=True) , 
-        ForeignKey("rol.id_rol") , 
+        ForeignKey("rol.id_rol" , ondelete="CASCADE") , 
         primary_key=True
     ) , 
     Column(

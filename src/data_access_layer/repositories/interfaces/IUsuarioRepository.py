@@ -10,7 +10,7 @@ class IUsuarioRepository(ABC):
         pass
 
     @abstractmethod
-    def findById(self , id_usuario: str) -> UsuarioModel:
+    def findById(self , id_usuario: str) -> UsuarioModel | None:
         pass
 
     @abstractmethod

@@ -6,7 +6,7 @@ from typing import List
 class IRolRepository(ABC):
 
     @abstractmethod
-    def findById(self , id_rol: str) -> RolModel:
+    def findById(self , id_rol: str) -> RolModel | None:
         pass
 
     @abstractmethod
@@ -19,4 +19,8 @@ class IRolRepository(ABC):
 
     @abstractmethod
     def save(self , rol_model: RolModel) -> None:
+        pass
+
+    @abstractmethod
+    def findByNombre(self , rol_name: str) -> RolModel | None:
         pass

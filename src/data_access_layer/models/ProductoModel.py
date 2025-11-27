@@ -52,9 +52,9 @@ class ProductoModel(Base):
 
     categoria_id = Column(
         UUID(as_uuid=True) , 
-        ForeignKey("categoria.id_categoria") ,
+        ForeignKey("categoria.id_categoria" , ondelete="SET NULL") ,
         name="categoria_id" , 
-        nullable=False
+        nullable=True
     )
     categoria = relationship(
         "CategoriaModel" ,
@@ -64,7 +64,8 @@ class ProductoModel(Base):
     comprobante = relationship(
         "ComprobanteModel" , 
         secondary=comprobante_producto , 
-        back_populates="producto"
+        back_populates="producto" , 
+        passive_deletes=True
     )
 
     __table_args__ = (

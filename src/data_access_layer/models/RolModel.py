@@ -49,7 +49,8 @@ class RolModel(Base):
     reporte = relationship(
         "ReporteModel" , 
         secondary=rol_reporte , 
-        back_populates="rol"
+        back_populates="rol" , 
+        passive_deletes=True
     )
 
     __table_args__ = (

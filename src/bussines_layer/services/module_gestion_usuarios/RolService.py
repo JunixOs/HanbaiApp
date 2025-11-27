@@ -44,3 +44,8 @@ class RolService(IRolService):
         return IRolMapper.toDomain(
             self.__rol_repository.findById(id_rol)
         )
+    
+    def ObtenerRolPorNombre(self , rol_name) -> RolDomainEntity:
+        return IRolMapper.toDomain(
+            self.__rol_repository.findByNombre(rol_name)
+        )

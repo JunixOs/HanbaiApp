@@ -11,7 +11,7 @@ class RolRepository(IRolRepository):
     def __init__(self , session_local_hanbai_db: Session) -> None:
         self.__session_local_hanbai_db = session_local_hanbai_db
 
-    def findById(self , id_rol: str) -> RolModel:
+    def findById(self , id_rol: str) -> RolModel | None:
         return self.__session_local_hanbai_db.query(RolModel).filter_by(id_rol = id_rol).first()
 
     def findAll(self) -> List[RolModel]:
@@ -27,3 +27,6 @@ class RolRepository(IRolRepository):
 
     def save(self , rol_model: RolModel) -> None:
         self.__session_local_hanbai_db.add(rol_model)
+
+    def findByNombre(self, rol_name: str) -> RolModel | None:
+        self.__session_local_hanbai_db.query(RolModel).filter_by(nombre = rol_name).first()

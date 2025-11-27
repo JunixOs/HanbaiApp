@@ -24,3 +24,7 @@ class IRolService(ABC):
     @abstractmethod
     def ObtenerRolPorId(self, id_rol: str) -> RolDomainEntity:
         pass
+
+    @abstractmethod
+    def ObtenerRolPorNombre(self , rol_name: str) -> RolDomainEntity:
+        pass
