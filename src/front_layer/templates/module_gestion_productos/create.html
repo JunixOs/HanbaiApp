@@ -1,8 +1,8 @@
-{% extends "products/base.html" %}
+{% extends "module_gestion_productos/base.html" %}
 {% block title %}Crear Producto - HanbaiApp{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='products/css/create.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/create.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
 <!-- HEADER DE LA PÁGINA -->
 <div class="page-header">
     <div class="breadcrumb">
-        <a href="{{ url_for('products.index') }}">Inventario</a> / Nuevo Producto
+        <a href="{{ url_for('producto.index') }}">Inventario</a> / Nuevo Producto
     </div>
     <h1 class="page-title">Registrar Nuevo Producto</h1>
 </div>
@@ -19,7 +19,7 @@
 <div class="form-card">
     <h3 class="form-section-title">Detalles del Producto</h3>
     
-    <form action="{{ url_for('products.create') }}" method="POST">
+    <form action="{{ url_for('producto.create') }}" method="POST">
         
         <!-- NOMBRE DEL PRODUCTO -->
         <div class="form-group">
@@ -89,7 +89,7 @@
 
         <!-- BOTONES -->
         <div class="btn-group-actions">
-            <a href="{{ url_for('products.index') }}" class="btn-secondary">
+            <a href="{{ url_for('producto.index') }}" class="btn-secondary">
                 Cancelar
             </a>
             <button type="submit" class="btn-primary">

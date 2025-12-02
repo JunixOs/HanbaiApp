@@ -11,7 +11,7 @@ from flask_login import LoginManager
 from front_layer.controllers.HomeController import home_controller
 from front_layer.controllers.module_gestion_usuarios.UsuarioController import usuario_controller
 from front_layer.controllers.module_gestion_usuarios.RolController import rol_controller
-from src.front_layer.controllers.module_gestion_productos.ProductoController import products_bp
+from src.front_layer.controllers.module_gestion_productos.ProductoController import producto_controller
 
 from data_access_layer.session import get_db_session
 
@@ -33,7 +33,7 @@ hanbai_main_app.register_blueprint(home_controller)
 # Aqui registro el controller para users pero cada ruta que ella cree tendra el prefijo "users"
 hanbai_main_app.register_blueprint(usuario_controller , url_prefix = "/gestion_usuarios/usuario")
 hanbai_main_app.register_blueprint(rol_controller , url_prefix = "/gestion_usuarios/rol")
-hanbai_main_app.register_blueprint(products_bp, url_prefix="/gestion_productos")
+hanbai_main_app.register_blueprint(producto_controller, url_prefix="/gestion_productos/producto")
 
 login_manager = LoginManager()
 

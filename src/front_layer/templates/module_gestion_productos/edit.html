@@ -1,8 +1,8 @@
-{% extends "products/base.html" %}
+{% extends "module_gestion_productos/base.html" %}
 {% block title %}Editar Producto - HanbaiApp{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='products/css/edit.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/edit.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
 <!-- HEADER DE EDICIÓN -->
 <div class="edit-header">
     <div class="edit-breadcrumb">
-        <a href="{{ url_for('products.index') }}">Inventario</a> / Editar Producto
+        <a href="{{ url_for('producto.index') }}">Inventario</a> / Editar Producto
     </div>
     <h1 class="edit-title">Editar Producto</h1>
 </div>
@@ -19,7 +19,7 @@
 <div class="edit-card">
     <h3 class="edit-section-title">Información del Producto</h3>
     
-    <form action="{{ url_for('products.edit', id=producto.id_producto) }}" method="POST">
+    <form action="{{ url_for('producto.edit', id=producto.id_producto) }}" method="POST">
         
         <!-- NOMBRE DEL PRODUCTO -->
         <div class="form-group">
@@ -89,7 +89,7 @@
 
         <!-- BOTONES -->
         <div class="btn-actions">
-            <a href="{{ url_for('products.index') }}" class="btn-cancel">
+            <a href="{{ url_for('producto.index') }}" class="btn-cancel">
                 Cancelar
             </a>
             <button type="submit" class="btn-update">
