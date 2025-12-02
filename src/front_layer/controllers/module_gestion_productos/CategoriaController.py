@@ -9,7 +9,7 @@ from flask import (
 )
 from flask_login import current_user
 
-template_dir = os.path.abspath("src/front_layer/templates/products")
+template_dir = os.path.abspath("src/front_layer/templates/module_gestion_productos")
 categoria_producto_controller = Blueprint('categoria_productos' , __name__ , template_folder=template_dir)
 
 @categoria_producto_controller.post("/crear")
@@ -31,7 +31,7 @@ def CrearCategoriaProducto():
         else:
             flash("Categoria registrada con exito" , "message")
 
-        return redirect("products/list.html")
+        return redirect("module_gestion_productos/list.html")
 
     else:
         return render_template("module_gestion_usuarios/login.html")

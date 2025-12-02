@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- CSS Principal del Dashboard -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='products/css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/dashboard.css') }}">
     
     <!-- Estilos específicos de cada página -->
     {% block styles %}{% endblock %}
@@ -40,7 +40,7 @@
             <a href="/" class="nav-link">
                 <i class="fas fa-chart-pie"></i> Dashboard
             </a>
-            <a href="/products" class="nav-link active">
+            <a href="/gestion_productos/producto" class="nav-link active">
                 <i class="fas fa-box"></i> Productos
             </a>
             <a href="#" class="nav-link">

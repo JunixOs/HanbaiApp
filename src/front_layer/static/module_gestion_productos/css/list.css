@@ -227,3 +227,75 @@
     margin: 0;
     font-size: 1rem;
 }
+
+/* ==================== LAYOUT DE CATÁLOGO (HU04) ==================== */
+.catalog-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* ==================== SIDEBAR DE FILTROS ==================== */
+.filters-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: sticky;
+    top: 2rem;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    display: block;
+    color: var(--text-main);
+}
+
+.price-range {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ==================== ALERTAS DE STOCK (HU18) ==================== */
+.stock-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stock-badge.critical {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.stock-badge.warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.stock-badge.ok {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* ==================== GRILLA DE PRODUCTOS ==================== */
+.products-grid {
+    flex: 1;
+    min-width: 0;
+}

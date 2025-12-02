@@ -18,3 +18,8 @@ class IProductoRepository(ABC):
     @abstractmethod
     def delete(self, producto: ProductoModel) -> None:
         pass
+
+    # --- NUEVO MÉTODO AGREGADO ---
+    @abstractmethod
+    def find_with_filters(self, nombre: str = None, categoria_id: str = None) -> List[ProductoModel]:
+        pass
