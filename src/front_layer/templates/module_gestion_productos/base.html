@@ -2,72 +2,84 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}HanbaiApp{% endblock %}</title>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- CSS Principal del Dashboard -->
     <link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/dashboard.css') }}">
-    
-    <!-- Estilos específicos de cada página -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% block styles %}{% endblock %}
 </head>
 <body>
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <a href="/" class="sidebar-brand">
-            <i class="fas fa-cube"></i>
-            <span>HanbaiApp</span>
-        </a>
-
-        <div class="user-profile">
-            <div class="user-avatar">A</div>
-            {% if user_name and rol_name %}
-                <div class="user-info">
-                    <h6>{{ user_name }}</h6>
-                    <span>{{ rol_name }}</span>
-                </div>
-            {% endif %}
-        </div>
-
-        <nav class="nav-menu">
-            <a href="/" class="nav-link">
-                <i class="fas fa-chart-pie"></i> Dashboard
-            </a>
-            <a href="/gestion_productos/producto" class="nav-link active">
-                <i class="fas fa-box"></i> Productos
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-shopping-cart"></i> Ventas
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-users"></i> Clientes
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-file-alt"></i> Reportes
-            </a>
-        </nav>
-
-        {% if authenticated %}
-            <div class="sidebar-footer">
-                <a href="{{ url_for('usuario.LogoutUsuario') }}" class="nav-link logout-link">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('producto.index') }}">
+                    <h2><i class="fas fa-store"></i> HanbaiApp</h2>
                 </a>
             </div>
-        {% endif %}
 
-    </aside>
+            {% if current_user.is_authenticated %}
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <span class="name">{{ current_user.nombre }}</span>
+                    <span class="role">{{ current_user.rol_name }}</span>
+                </div>
+            </div>
+            {% endif %}
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('usuario.Dashboard') }}" class="nav-link">
+                            <i class="fas fa-chart-line"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('producto.index') }}" class="nav-link">
+                            <i class="fas fa-box"></i> <span>Productos</span>
+                        </a>
+                    </li>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-wrapper">
-        {% block content %}{% endblock %}
-    </main>
+                    {% if current_user.is_authenticated and current_user.rol_name == 'ADMINISTRADOR' %}
+                    <li class="nav-header">ADMINISTRACIÓN</li>
+                    <li>
+                        <a href="{{ url_for('usuario.VerTodosLosUsuarios') }}" class="nav-link">
+                            <i class="fas fa-users"></i> <span>Usuarios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('rol.index') }}" class="nav-link">
+                            <i class="fas fa-user-shield"></i> <span>Roles</span>
+                        </a>
+                    </li>
+                    {% endif %}
 
+                    <li class="nav-item-bottom">
+                        <a href="{{ url_for('usuario.LogoutUsuario') }}" class="nav-link logout">
+                            <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content-wrapper">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fas fa-info-circle"></i> {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 </body>
 </html>

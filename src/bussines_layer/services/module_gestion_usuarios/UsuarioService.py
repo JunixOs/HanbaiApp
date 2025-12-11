@@ -76,8 +76,8 @@ class UsuarioService(IUsuarioService):
             if usuario_model_in_db.correo != usuario_domain_entity_mod.correo: # type: ignore
                 usuario_model_in_db.correo = usuario_domain_entity_mod.correo # type: ignore
 
-            if not IBcryptService.CheckPassword(usuario_domain_entity_mod.password_hash, usuario_model_in_db.password_hash): # type: ignore
-                usuario_model_in_db.password_hash = IBcryptService.HashPassword(usuario_domain_entity_mod.password_hash) # type: ignore
+            if not BcryptService.CheckPassword(usuario_domain_entity_mod.password_hash, usuario_model_in_db.password_hash): 
+                usuario_model_in_db.password_hash = BcryptService.HashPassword(usuario_domain_entity_mod.password_hash)
             
             if usuario_model_in_db.dni != usuario_domain_entity_mod.dni: # type: ignore
                 usuario_model_in_db.dni = usuario_domain_entity_mod.dni # type: ignore

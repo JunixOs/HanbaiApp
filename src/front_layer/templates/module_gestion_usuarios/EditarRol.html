@@ -1,0 +1,30 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Editar Rol{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/editar_rol.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Editar Rol</h1>
+    <a href="{{ url_for('rol.index') }}" class="btn-secondary">Volver</a>
+</div>
+
+<div class="form-card">
+    <form action="{{ url_for('rol.edit') }}" method="POST">
+        <input type="hidden" name="id_rol" value="{{ rol.id_rol }}">
+        <div class="form-group">
+            <label class="form-label">Nombre del Rol</label>
+            <input type="text" name="nombre" class="form-input" value="{{ rol.nombre }}" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-input" rows="3">{{ rol.descripcion }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Actualizar Rol</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/eliminar_usuario.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="warning-card">
+        <div class="warning-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        
+        <h1 class="warning-title">¿Estás seguro?</h1>
+        <p class="warning-text">
+            Estás a punto de eliminar permanentemente al siguiente usuario. <br>
+            <strong>Esta acción no se puede deshacer.</strong>
+        </p>
+
+        <div class="user-details-box">
+            <div class="detail-row">
+                <span class="label">Usuario:</span>
+                <span class="value">{{ usuario.nombre }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Correo:</span>
+                <span class="value">{{ usuario.correo }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Rol:</span>
+                <span class="badge-role">{{ rol_name }}</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{{ url_for('usuario.VerTodosLosUsuarios') }}" class="btn-cancel">
+                Cancelar
+            </a>
+
+            <form action="{{ url_for('usuario.EliminarCuenta') }}" method="POST">
+                <input type="hidden" name="id_usuario_delete" value="{{ usuario.id_usuario }}">
+                
+                <button type="submit" class="btn-delete">
+                    <i class="fas fa-trash-alt"></i> Sí, Eliminar Usuario
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

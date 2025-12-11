@@ -1,14 +1,23 @@
 from functools import wraps
-from flask import abort
-from flask_login import login_required, current_user
+from flask import abort, redirect, url_for, flash
+from flask_login import current_user
 
-def roles_required(*roles):
-    def decorator(fn):
+def roles_required(*roles_permitidos):
+    def wrapper(fn):
         @wraps(fn)
-        @login_required
-        def wrapper(*args, **kwargs):
-            if not any(current_user.has_role(r) for r in roles):
-                abort(403)
+        def decorated_view(*args, **kwargs):
+            # 1. Verificar Login
+            if not current_user.is_authenticated:
+                return redirect(url_for('usuario.LoginUsuarioGet'))
+            
+            # 2. Verificar Rol (CORRECCIÓN AQUÍ)
+            # Usamos .rol_name, NO .rol.nombre
+            rol_actual = getattr(current_user, 'rol_name', 'SIN_ROL')
+            
+            if rol_actual not in roles_permitidos:
+                flash("No tienes permisos para acceder a esta sección.", "error")
+                return redirect(url_for('producto.index'))
+            
             return fn(*args, **kwargs)
-        return wrapper
-    return decorator
+        return decorated_view
+    return wrapper

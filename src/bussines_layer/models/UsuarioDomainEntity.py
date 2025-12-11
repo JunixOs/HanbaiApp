@@ -10,6 +10,8 @@ class UsuarioDomainEntity:
     __creado_en: float
     __actualizado_en: float
     __rol_id: str
+    # NUEVO CAMPO: Para guardar el nombre del rol
+    __rol_nombre: str = "Sin Rol" 
 
     @property
     def id_usuario(self) -> str:
@@ -64,16 +66,13 @@ class UsuarioDomainEntity:
     def rol_id(self) -> str:
         return self.__rol_id
     @rol_id.setter
-    def rol_id(self , rol_id) -> None:
+    def rol_id(self , rol_id: str) -> None:
         self.__rol_id = rol_id
 
-
-    def DiasDeCuentaActiva(self):
-        difference = datetime.now() - datetime.fromtimestamp(self.__creado_en)
-
-        return difference.days
-    
-    def DiasDesdeUltimaActualizacion(self):
-        difference = datetime.now() - datetime.fromtimestamp(self.__actualizado_en)
-
-        return difference.days
+    # PROPIEDAD NUEVA PARA ACCEDER AL NOMBRE DEL ROL
+    @property
+    def rol_nombre(self) -> str:
+        return self.__rol_nombre
+    @rol_nombre.setter
+    def rol_nombre(self, rol_nombre: str) -> None:
+        self.__rol_nombre = rol_nombre

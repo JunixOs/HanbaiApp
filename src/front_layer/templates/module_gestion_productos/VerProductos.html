@@ -1,0 +1,91 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Inventario - HanbaiApp{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/ver_producto.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-header-info">
+        <div class="breadcrumb-text">Catálogo</div>
+        <h1 class="page-title">Gestión de Productos</h1>
+    </div>
+
+    {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+        <a href="{{ url_for('producto.create') }}" class="btn-primary">
+            <i class="fas fa-plus"></i> Nuevo Producto
+        </a>
+    {% endif %}
+</div>
+
+<div class="table-card">
+    <div class="toolbar">
+        <form action="{{ url_for('producto.index') }}" method="GET" class="search-form">
+            <input type="text" name="q" class="search-input" placeholder="Buscar por nombre..." value="{{ filtros.q or '' }}">
+            
+            <select name="categoria" class="search-input" style="max-width: 200px; margin-left: 10px;">
+                <option value="">Todas las categorías</option>
+                {% for c in categorias %}
+                    <option value="{{ c.id_categoria }}" {% if filtros.categoria == c.id_categoria|string %}selected{% endif %}>
+                        {{ c.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn-filter" style="margin-left: 10px;">Filtrar</button>
+        </form>
+    </div>
+
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+                    <th class="text-end">Acciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td>
+                    <div class="product-name">{{ p.nombre }}</div>
+                    <small style="color:#999">{{ p.descripcion[:50] }}</small>
+                </td>
+                <td>
+                    <span class="product-price">S/. {{ "%.2f"|format(p.precio) }}</span>
+                </td>
+                <td>
+                    {% if p.stock <= 5 %}
+                        <span class="badge badge-danger">Crítico ({{ p.stock }})</span>
+                    {% elif p.stock <= 20 %}
+                        <span class="badge badge-warning">Bajo ({{ p.stock }})</span>
+                    {% else %}
+                        <span class="badge badge-success">{{ p.stock }} unid.</span>
+                    {% endif %}
+                </td>
+                
+                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+                    <td class="text-end">
+                        <a href="{{ url_for('producto.edit', id=p.id_producto) }}" class="btn-action" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ url_for('producto.delete', id=p.id_producto) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar producto?');">
+                            <button type="submit" class="btn-action" style="color: #dc2626;">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="empty-state">No hay productos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

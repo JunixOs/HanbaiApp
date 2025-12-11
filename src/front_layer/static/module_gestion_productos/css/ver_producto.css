@@ -1,0 +1,184 @@
+:root {
+    --primary-color: #2563eb;       /* Azul principal */
+    --primary-hover: #1d4ed8;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --border-color: #e2e8f0;
+    --bg-card: #ffffff;
+    --danger-color: #ef4444;        /* Rojo para stock crítico/eliminar */
+    --warning-color: #f59e0b;       /* Naranja para stock bajo */
+    --success-color: #10b981;       /* Verde para stock bien */
+}
+
+/* --- Encabezado --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-header-info .breadcrumb-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin: 0;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* --- Barra de Herramientas (Filtros) --- */
+.toolbar {
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap; /* Para móviles */
+}
+
+.search-input {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    min-width: 250px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.btn-filter {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-filter:hover {
+    background-color: #f1f5f9;
+}
+
+/* --- Tabla de Productos --- */
+.table-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-custom td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    color: var(--text-dark);
+}
+
+.product-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    display: block;
+}
+
+.product-price {
+    font-family: 'Consolas', monospace; /* Para números alineados */
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* --- Badges de Stock --- */
+.badge {
+    padding: 0.3rem 0.7rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-danger {
+    background-color: #fef2f2;
+    color: var(--danger-color);
+}
+
+.badge-warning {
+    background-color: #fffbeb;
+    color: var(--warning-color);
+}
+
+.badge-success {
+    background-color: #ecfdf5;
+    color: var(--success-color);
+}
+
+/* --- Acciones --- */
+.text-end { text-align: right; }
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-action:hover {
+    background-color: #f1f5f9;
+    color: var(--primary-color);
+}
