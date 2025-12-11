@@ -1,0 +1,105 @@
+:root {
+    --primary-color: #0f62fe;
+    --text-main: #111827;
+    --border-color: #e5e7eb;
+}
+
+/* Header con Botón */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #0353e9;
+}
+
+/* Tabla */
+.table-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden; /* Para bordes redondeados */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-custom th {
+    background: #f9fafb;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-custom td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    color: #1f2937;
+    vertical-align: middle;
+}
+
+.table-custom tr:last-child td {
+    border-bottom: none;
+}
+
+.product-name {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.badge-neutral {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    font-weight: 500;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.btn-action {
+    color: #6b7280;
+    padding: 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.btn-action:hover {
+    color: var(--primary-color);
+    background-color: #eff6ff;
+}

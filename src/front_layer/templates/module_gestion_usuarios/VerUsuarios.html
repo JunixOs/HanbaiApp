@@ -1,0 +1,60 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/ver_usuarios.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-header-info">
+        <div class="breadcrumb-text">Administración</div>
+        <h1 class="page-title">Usuarios del Sistema</h1>
+    </div>
+    <a href="{{ url_for('usuario.RegistrarUsuarioGet') }}" class="btn-primary">
+        <i class="fas fa-user-plus"></i> Nuevo Usuario
+    </a>
+</div>
+
+<div class="table-card">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Rol Asignado</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>
+                    <div class="product-name">{{ u.nombre }}</div>
+                    <small style="color:#999">{{ u.correo }}</small>
+                </td>
+                <td>
+                    <span class="badge badge-info">{{ u.rol_nombre }}</span>
+                </td>
+                <td>
+                    <span class="badge badge-success">Activo</span>
+                </td>
+                <td class="text-end">
+                    <a href="{{ url_for('usuario.EditarUsuarioGet', id_usuario=u.id_usuario) }}" class="btn-action" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    
+                    {% if u.id_usuario|string != current_user.id_usuario|string %}
+                        <a href="{{ url_for('usuario.ConfirmarEliminarGet', id_usuario=u.id_usuario) }}" class="btn-action" style="color: #dc2626;" title="Eliminar Usuario">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="empty-state">No hay usuarios registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
