@@ -1,12 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
-</head>
-<body>
-    Users
-    <a href="{{ url_for('home.ShowHome') }}">Ir a home</a>
-</body>
-</html>
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Dashboard - HanbaiApp{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-header-info">
+        <h1 class="page-title">Panel de Control</h1>
+        <p class="text-secondary">
+            Bienvenido, <strong>{{ nombre }}</strong> 
+            {% if rol %}
+                <span class="user-role-badge">{{ rol }}</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+{% if message %}
+<div class="alert-box success">
+    <i class="fas fa-check-circle"></i> {{ message }}
+</div>
+{% endif %}
+
+<div class="dashboard-cards">
+    
+    {% if rol == 'ADMINISTRADOR' %}
+    <div class="card-summary">
+        <div class="icon-box user-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="card-content">
+            <h3>Usuarios</h3>
+            <p>Gestionar cuentas y roles</p>
+            <a href="{{ url_for('usuario.VerTodosLosUsuarios') }}" class="card-link users-link">
+                Administrar <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card-summary">
+        <div class="icon-box product-icon">
+            <i class="fas fa-box"></i>
+        </div>
+        <div class="card-content">
+            <h3>Inventario</h3>
+            <p>Ver catálogo de productos</p>
+            <a href="{{ url_for('producto.index') }}" class="card-link products-link">
+                Ir al Catálogo <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="card-summary">
+        <div class="icon-box profile-icon">
+            <i class="fas fa-user-cog"></i>
+        </div>
+        <div class="card-content">
+            <h3>Mi Cuenta</h3>
+            <p>Actualizar mis datos</p>
+            <a href="{{ url_for('usuario.EditarInformacionGet') }}" class="card-link profile-link">
+                Editar Perfil <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

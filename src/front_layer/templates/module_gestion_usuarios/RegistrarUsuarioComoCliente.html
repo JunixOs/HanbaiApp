@@ -1,15 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registro de Cliente - HanbaiApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/registrar_cliente.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <form action="{{ url_for('usuario.RegistrarUsuarioComoClientePost') }}" method="post">
-
+    <div class="container">
+        <div class="form-header">
+            <h2>Crear Cuenta Nueva</h2>
+            <p>Únete a nosotros para realizar tus compras</p>
+        </div>
         
+        <form action="{{ url_for('usuario.RegistrarUsuarioComoClientePost') }}" method="post">
+            <div class="form-group">
+                <label class="form-label">Nombre Completo</label>
+                <input type="text" name="nombre" class="form-input" placeholder="Tu nombre completo" required>
+            </div>
 
-    </form>
+            <div class="form-group">
+                <label class="form-label">DNI / Identificación</label>
+                <input type="text" name="dni" class="form-input" placeholder="Número de documento" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Correo Electrónico</label>
+                <input type="email" name="correo" class="form-input" placeholder="tucorreo@ejemplo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Contraseña</label>
+                <input type="password" name="password" class="form-input" placeholder="Crea una contraseña segura" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Registrarse</button>
+        </form>
+        
+        <a href="{{ url_for('usuario.LoginUsuarioGet') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Volver al Login
+        </a>
+    </div>
 </body>
 </html>
