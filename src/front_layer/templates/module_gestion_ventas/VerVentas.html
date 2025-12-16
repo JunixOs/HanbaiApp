@@ -1,0 +1,111 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Ventas - HanbaiApp{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/ver_producto.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-header-info">
+        <div class="breadcrumb-text">Ventas</div>
+        <h1 class="page-title">Gestión de Ventas</h1>
+    </div>
+
+    {# SOLO CLIENTE PUEDE REGISTRAR NUEVA VENTA #}
+    {% if rol_name == 'CLIENTE' %}
+        <a href="{{ url_for('venta.create') }}" class="btn-primary">
+            <i class="fas fa-cash-register"></i> Nueva Venta
+        </a>
+    {% endif %}
+</div>
+
+<div class="table-card">
+
+    {# FILTROS SOLO PARA ADMIN Y ENCARGADO #}
+    {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+    <div class="toolbar">
+        <form method="GET" class="search-form">
+            <input type="text"
+                   name="cliente"
+                   class="search-input"
+                   placeholder="Buscar por cliente...">
+
+            <select name="estado"
+                    class="search-input"
+                    style="max-width:200px; margin-left:10px;">
+                <option value="">Todos los estados</option>
+                {% for e in estados %}
+                    <option value="{{ e.id_estado_venta }}">
+                        {{ e.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button class="btn-filter" style="margin-left:10px;">
+                Filtrar
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th>#</th>
+
+                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+                    <th>Cliente</th>
+                {% endif %}
+
+                <th>Subtotal</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in ventas %}
+            <tr>
+                <td>{{ v.id_venta }}</td>
+
+                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
+                    <td>{{ v.usuario.nombre }}</td>
+                {% endif %}
+
+                <td>
+                    <span class="product-price">
+                        S/. {{ "%.2f"|format(v.subtotal) }}
+                    </span>
+                </td>
+
+                <td>
+                    {% if v.estado.nombre == 'COMPLETADA' %}
+                        <span class="badge badge-success">{{ v.estado.nombre }}</span>
+                    {% elif v.estado.nombre == 'PENDIENTE' %}
+                        <span class="badge badge-warning">{{ v.estado.nombre }}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ v.estado.nombre }}</span>
+                    {% endif %}
+                </td>
+
+                <td class="text-end">
+                    <a href="{{ url_for('venta.detalle', id=v.id_venta) }}"
+                       class="btn-action"
+                       title="Ver detalle">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="empty-state">
+                    No hay ventas registradas.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
