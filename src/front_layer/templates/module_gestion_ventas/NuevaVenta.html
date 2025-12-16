@@ -1,0 +1,94 @@
+{% extends "module_gestion_productos/base.html" %}
+{% block title %}Nueva Venta - HanbaiApp{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/ver_producto.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-header-info">
+        <div class="breadcrumb-text">Ventas</div>
+        <h1 class="page-title">Nueva Venta</h1>
+    </div>
+
+    <a href="{{ url_for('venta.index') }}" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<form method="POST">
+    <div class="table-card">
+
+        <div class="toolbar">
+            <span style="font-weight:600; color:#334155;">
+                Selecciona los productos a comprar
+            </span>
+        </div>
+
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for p in productos %}
+                <tr>
+                    <td>
+                        <div class="product-name">{{ p.nombre }}</div>
+                        <small style="color:#999">{{ p.descripcion[:50] }}</small>
+                    </td>
+
+                    <td>
+                        <span class="product-price">
+                            S/. {{ "%.2f"|format(p.precio) }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if p.stock <= 5 %}
+                            <span class="badge badge-danger">Crítico</span>
+                        {% elif p.stock <= 20 %}
+                            <span class="badge badge-warning">Bajo</span>
+                        {% else %}
+                            <span class="badge badge-success">Disponible</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <input
+                            type="number"
+                            name="cantidad_{{ p.id_producto }}"
+                            min="0"
+                            max="{{ p.stock }}"
+                            class="search-input"
+                            style="width:90px;"
+                        >
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        No hay productos disponibles.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-check"></i> Confirmar Venta
+            </button>
+        </div>
+
+    </div>
+</form>
+
+{% endblock %}
