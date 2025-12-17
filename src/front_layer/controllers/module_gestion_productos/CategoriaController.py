@@ -13,7 +13,8 @@ template_dir = os.path.abspath("src/front_layer/templates/module_gestion_product
 categoria_producto_controller = Blueprint('categoria_productos' , __name__ , template_folder=template_dir)
 
 @categoria_producto_controller.post("/crear")
-@roles_required("ENCARGADO_DE_TIENDA")
+# CAMBIO REALIZADO: Se agregan ambos roles al decorador
+@roles_required("ENCARGADO_DE_TIENDA", "ADMINISTRADOR")
 def CrearCategoriaProducto():
     if(current_user.is_authenticated):
 

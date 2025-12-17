@@ -1,26 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>HanbaiApp - Sistema de Gestión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_usuarios/css/home.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    Home
-    <!-- Para contruir una referencia a un metodo usamos el url_for -->
-    <!-- dentro escribimos el nombre del Blueprint y seguido el nombre de la funcion -->
-    <!-- Si el metodo viene del app.py entonces solo escribimos el nombre de la funcion -->
-    <!-- ya que se interpretara que estamos haciendo referencia a app.py -->
-    <a href="{{ url_for('producto.index')}}">Ir a productos</a>
-    
-    {% if not authenticated %}
-        <a href="{{ url_for('usuario.LoginUsuarioGet')}}">Iniciar Sesion</a>
-        <a href="{{ url_for('usuario.RegistrarUsuarioComoClienteGet')}}">Registrarse</a>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-cubes"></i> HanbaiApp
+        </div>
+        <div class="nav-links">
+            {% if authenticated %}
+                <a href="{{ url_for('producto.index') }}" class="btn-nav btn-dashboard">
+                    <i class="fa-solid fa-gauge"></i> Ir al Dashboard
+                </a>
+            {% else %}
+                <a href="{{ url_for('usuario.LoginUsuarioGet') }}" class="btn-nav">Iniciar Sesión</a>
+                <a href="{{ url_for('usuario.RegistrarUsuarioComoClienteGet') }}" class="btn-nav btn-register-nav">Registrarse</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>Bienvenido a HanbaiApp</h1>
+            <p class="hero-subtitle">Gestión inteligente de ventas e inventario para tu negocio.</p>
+            {% if not authenticated %}
+            <div class="hero-buttons">
+                <a href="{{ url_for('usuario.LoginUsuarioGet') }}" class="btn-hero btn-primary-hero">
+                    Empezar Ahora
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if productos %}
+    <section class="showcase-section">
+        <div class="container">
+            <h2 class="section-title">Nuevos Ingresos</h2>
+            <div class="products-grid">
+                {% for prod in productos %}
+                <div class="product-card">
+                    <div class="card-img-placeholder">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">{{ prod.nombre }}</h3>
+                        <span class="card-price">S/ {{ prod.precio_unitario }}</span>
+                        <p class="card-desc">{{ prod.descripcion[:60] }}...</p>
+                        
+                        <a href="{{ url_for('usuario.LoginUsuarioGet')}}" class="btn-lock">
+                            <i class="fa-solid fa-lock" style="margin-right: 8px;"></i> Comprar
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <p>¿Quieres ver todo el catálogo? <a href="{{ url_for('usuario.LoginUsuarioGet')}}">Inicia Sesión</a></p>
+            </div>
+        </div>
+    </section>
     {% endif %}
 
-    {% if authenticated %}
-        <a href="{{ url_for('usuario.LogoutUsuario')}}">Cerrar Sesion</a>
-    {% endif %}
+    <section class="info-section" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <div class="mv-grid">
+                <div class="mv-card">
+                    <div class="mv-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>Misión</h3>
+                    <p>Potenciar PYMES con herramientas tecnológicas accesibles y eficientes.</p>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-icon"><i class="fa-solid fa-eye"></i></div>
+                    <h3>Visión</h3>
+                    <p>Ser el estándar en sistemas de gestión comercial en la región.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 HanbaiApp. Todos los derechos reservados.</p>
+    </footer>
 
 </body>
 </html>

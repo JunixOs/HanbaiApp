@@ -1,51 +1,45 @@
 {% extends "module_gestion_productos/base.html" %}
-{% block title %}Ventas - HanbaiApp{% endblock %}
+
+{% block title %}
+    {% if rol_name == 'CLIENTE' %}Mis Compras{% else %}Gestión de Ventas{% endif %}
+{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/ver_producto.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_ventas/css/ver_ventas.css') }}">
 {% endblock %}
 
 {% block content %}
 
 <div class="page-header">
     <div class="page-header-info">
-        <div class="breadcrumb-text">Ventas</div>
-        <h1 class="page-title">Gestión de Ventas</h1>
+        <div class="breadcrumb-text">
+            {% if rol_name == 'CLIENTE' %}Historial{% else %}Ventas{% endif %}
+        </div>
+        <h1 class="page-title">
+            {% if rol_name == 'CLIENTE' %}Mis Compras{% else %}Gestión de Ventas{% endif %}
+        </h1>
     </div>
 
-    {# SOLO CLIENTE PUEDE REGISTRAR NUEVA VENTA #}
     {% if rol_name == 'CLIENTE' %}
-        <a href="{{ url_for('venta.create') }}" class="btn-primary">
-            <i class="fas fa-cash-register"></i> Nueva Venta
+        <a href="{{ url_for('venta.create') }}" class="btn-filter" style="text-decoration:none; background:#3b82f6; color:white;">
+            <i class="fas fa-shopping-basket"></i> Ir al Catálogo / Comprar
         </a>
     {% endif %}
 </div>
 
 <div class="table-card">
 
-    {# FILTROS SOLO PARA ADMIN Y ENCARGADO #}
     {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
     <div class="toolbar">
-        <form method="GET" class="search-form">
-            <input type="text"
-                   name="cliente"
-                   class="search-input"
-                   placeholder="Buscar por cliente...">
-
-            <select name="estado"
-                    class="search-input"
-                    style="max-width:200px; margin-left:10px;">
+        <form method="GET" style="display:flex; gap:10px; width:100%;">
+            <input type="text" name="cliente" class="search-input" placeholder="Buscar Cliente..." style="flex:1;">
+            <select name="estado" class="search-input">
                 <option value="">Todos los estados</option>
                 {% for e in estados %}
-                    <option value="{{ e.id_estado_venta }}">
-                        {{ e.nombre }}
-                    </option>
+                    <option value="{{ e.id_estado_venta }}">{{ e.nombre }}</option>
                 {% endfor %}
             </select>
-
-            <button class="btn-filter" style="margin-left:10px;">
-                Filtrar
-            </button>
+            <button class="btn-filter">Filtrar</button>
         </form>
     </div>
     {% endif %}
@@ -53,55 +47,89 @@
     <table class="table-custom">
         <thead>
             <tr>
-                <th>#</th>
-
-                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
-                    <th>Cliente</th>
-                {% endif %}
-
-                <th>Subtotal</th>
+                <th>Pedido / Fecha</th>
+                <th>Productos</th> {% if rol_name != 'CLIENTE' %}<th>Cliente</th>{% endif %}
+                <th>Total</th>
                 <th>Estado</th>
-                <th class="text-end">Acciones</th>
+                <th class="text-end" style="min-width: 250px;">Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for v in ventas %}
             <tr>
-                <td>{{ v.id_venta }}</td>
+                <td>
+                    <div style="font-weight:bold; color:#334155;">
+                        {{ v.comprobante.fecha_venta.strftime('%d/%m/%Y') if v.comprobante and v.comprobante.fecha_venta else 'Hoy' }}
+                    </div>
+                    <small style="color:#94a3b8; font-size:0.75rem;">ID: {{ v.id_venta }}</small>
+                </td>
 
-                {% if rol_name in ['ADMINISTRADOR', 'ENCARGADO_DE_TIENDA'] %}
-                    <td>{{ v.usuario.nombre }}</td>
+                <td>
+                    <div class="product-list-preview">
+                        {% if v.comprobante and v.comprobante.producto %}
+                            {# Mostramos solo los primeros 2 items #}
+                            {% for item in v.comprobante.producto[:2] %}
+                                <span class="product-tag">{{ item.nombre }}</span>
+                            {% endfor %}
+                            
+                            {# Si hay más, mostramos contador #}
+                            {% if v.comprobante.producto|length > 2 %}
+                                <span class="more-items-tag">(+{{ v.comprobante.producto|length - 2 }})</span>
+                            {% endif %}
+                        {% else %}
+                            <span style="color:#cbd5e1;">Sin items</span>
+                        {% endif %}
+                    </div>
+                </td>
+
+                {% if rol_name != 'CLIENTE' %}
+                    <td>{{ v.usuario.nombre if v.usuario else 'Desconocido' }}</td>
                 {% endif %}
 
                 <td>
-                    <span class="product-price">
-                        S/. {{ "%.2f"|format(v.subtotal) }}
-                    </span>
+                    <span style="font-family:monospace; font-weight:700;">S/. {{ "%.2f"|format(v.subtotal) }}</span>
                 </td>
 
                 <td>
                     {% if v.estado.nombre == 'COMPLETADA' %}
-                        <span class="badge badge-success">{{ v.estado.nombre }}</span>
+                        <span class="badge badge-success">Pagado</span>
                     {% elif v.estado.nombre == 'PENDIENTE' %}
-                        <span class="badge badge-warning">{{ v.estado.nombre }}</span>
+                        <span class="badge badge-warning">Pendiente</span>
+                    {% elif v.estado.nombre == 'CANCELADO' %}
+                        <span class="badge badge-danger">Cancelado</span>
                     {% else %}
-                        <span class="badge badge-danger">{{ v.estado.nombre }}</span>
+                        <span class="badge badge-secondary">{{ v.estado.nombre }}</span>
                     {% endif %}
                 </td>
 
                 <td class="text-end">
-                    <a href="{{ url_for('venta.detalle', id=v.id_venta) }}"
-                       class="btn-action"
-                       title="Ver detalle">
-                        <i class="fas fa-eye"></i>
-                    </a>
+                    <div class="btn-group-actions">
+                        {% if v.estado.nombre == 'PENDIENTE' %}
+                            <form action="{{ url_for('venta.pagar', id=v.id_venta) }}" method="POST">
+                                <button type="submit" class="btn-sm btn-pay" title="Pagar ahora">
+                                    <i class="fas fa-dollar-sign"></i> Pagar
+                                </button>
+                            </form>
+                            <a href="{{ url_for('venta.editar', id=v.id_venta) }}" class="btn-sm btn-edit" title="Modificar">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <form action="{{ url_for('venta.cancelar', id=v.id_venta) }}" method="POST"
+                                  onsubmit="return confirm('¿Seguro que deseas cancelar?');">
+                                <button type="submit" class="btn-sm btn-cancel" title="Cancelar">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{{ url_for('venta.detalle', id=v.id_venta) }}" class="btn-sm btn-view">
+                                <i class="fas fa-eye"></i> Ver Detalle
+                            </a>
+                        {% endif %}
+                    </div>
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="5" class="empty-state">
-                    No hay ventas registradas.
-                </td>
+                <td colspan="6" style="text-align:center; padding:30px; color:#94a3b8;">No tienes compras registradas.</td>
             </tr>
             {% endfor %}
         </tbody>

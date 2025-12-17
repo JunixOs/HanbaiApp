@@ -1,0 +1,96 @@
+{% extends "module_gestion_productos/base.html" %}
+
+{% block title %}Detalle de Venta{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_ventas/css/detalle_venta.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div class="page-header-info">
+        <div class="breadcrumb-text">Ventas / Detalle</div>
+        <h1 class="page-title">Detalle del Pedido</h1>
+    </div>
+    <a href="{{ url_for('venta.index') }}" class="btn-secondary" style="background:#e2e8f0; color:#475569; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:600;">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="receipt-header">
+    <div class="receipt-info-group">
+        <strong>ID Pedido</strong>
+        <span>{{ venta.id_venta }}</span>
+    </div>
+    
+    <div class="receipt-info-group">
+        <strong>Cliente</strong>
+        <span>{{ venta.usuario.nombre if venta.usuario else 'Desconocido' }}</span>
+    </div>
+
+    <div class="receipt-info-group">
+        <strong>Fecha</strong>
+        <span>{{ venta.comprobante.fecha_venta.strftime('%d/%m/%Y %H:%M') if venta.comprobante and venta.comprobante.fecha_venta else '---' }}</span>
+    </div>
+
+    <div class="receipt-info-group">
+        <strong>Estado Actual</strong>
+        {% if venta.estado.nombre == 'COMPLETADA' %}
+            <span class="badge-status status-success">PAGADO</span>
+        {% elif venta.estado.nombre == 'PENDIENTE' %}
+            <span class="badge-status status-warning">PENDIENTE</span>
+        {% elif venta.estado.nombre == 'CANCELADO' %}
+            <span class="badge-status status-danger">CANCELADO</span>
+        {% else %}
+            <span class="badge-status status-default">{{ venta.estado.nombre }}</span>
+        {% endif %}
+    </div>
+
+    <div class="receipt-info-group">
+        <strong>
+            {% if venta.estado.nombre == 'PENDIENTE' %}
+                Total a Pagar
+            {% elif venta.estado.nombre == 'COMPLETADA' %}
+                Total Pagado
+            {% elif venta.estado.nombre == 'CANCELADO' %}
+                Monto Anulado
+            {% else %}
+                Total
+            {% endif %}
+        </strong>
+        
+        <span class="total-amount {{ 'total-canceled' if venta.estado.nombre == 'CANCELADO' else '' }}">
+            S/. {{ "%.2f"|format(venta.subtotal) }}
+        </span>
+    </div>
+</div>
+
+<div class="items-card">
+    <h3 style="margin-bottom:20px; color:#1e293b;">Productos Adquiridos</h3>
+    
+    <table class="table-details">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th style="text-align:right;">Precio Unitario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in venta.items %}
+            <tr>
+                <td><strong>{{ item.nombre }}</strong></td>
+                <td><small style="color:#64748b;">{{ item.descripcion }}</small></td>
+                <td class="item-price">S/. {{ "%.2f"|format(item.precio) }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" style="text-align:center; padding:30px; color:#94a3b8;">Sin detalles disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

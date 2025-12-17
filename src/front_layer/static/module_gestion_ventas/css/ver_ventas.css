@@ -1,0 +1,103 @@
+/* ... (MANTENER TODO EL CÓDIGO ANTERIOR DE LA TABLA Y BOTONES) ... */
+
+/* --- TARJETA PRINCIPAL --- */
+.table-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* --- TABLA --- */
+.table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.table-custom td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+/* --- BADGES (ESTADOS) --- */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.badge-success { background-color: #d1fae5; color: #065f46; }
+.badge-warning { background-color: #fef3c7; color: #92400e; }
+.badge-danger { background-color: #fee2e2; color: #991b1b; }
+.badge-secondary { background-color: #f1f5f9; color: #475569; }
+
+/* --- BOTONES DE ACCIÓN --- */
+.btn-group-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+.btn-sm {
+    padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; border: none;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    text-decoration: none; color: white; transition: background 0.2s; font-weight: 500;
+}
+
+.btn-pay { background-color: #10b981; }
+.btn-pay:hover { background-color: #059669; }
+
+.btn-edit { background-color: #3b82f6; }
+.btn-edit:hover { background-color: #2563eb; }
+
+.btn-cancel { background-color: #ef4444; }
+.btn-cancel:hover { background-color: #dc2626; }
+
+.btn-view { background-color: #64748b; }
+.btn-view:hover { background-color: #475569; }
+
+/* --- BARRA DE FILTROS --- */
+.toolbar { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; }
+.search-input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+.btn-filter { background: #0f172a; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+
+/* =========================================
+   NUEVOS ESTILOS: LISTA DE PRODUCTOS
+   ========================================= */
+.product-list-preview {
+    max-width: 300px;       /* Evita que la columna se haga gigante */
+    white-space: nowrap;    /* Mantiene todo en una línea */
+    overflow: hidden;       /* Oculta lo que sobre */
+    text-overflow: ellipsis; /* Pone "..." si es muy largo */
+    color: #334155;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.product-tag {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    font-weight: 500;
+}
+
+.more-items-tag {
+    color: #64748b;
+    font-size: 0.8rem;
+    font-style: italic;
+}

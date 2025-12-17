@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}HanbaiApp{% endblock %}</title>
 
-    <!-- CSS Base (Productos / Layout general) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/dashboard.css') }}">
-
-    <!-- FontAwesome -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     {% block styles %}{% endblock %}
 </head>
@@ -18,17 +15,14 @@
 <body>
 <div class="app-wrapper">
 
-    <!-- ===================== SIDEBAR ===================== -->
     <aside class="sidebar">
 
-        <!-- Logo -->
         <div class="sidebar-header">
-            <a href="{{ url_for('producto.index') }}">
+            <a href="{{ url_for('usuario.Dashboard') }}">
                 <h2><i class="fas fa-store"></i> HanbaiApp</h2>
             </a>
         </div>
 
-        <!-- Perfil -->
         {% if current_user.is_authenticated %}
         <div class="user-profile">
             <div class="user-avatar">
@@ -41,11 +35,9 @@
         </div>
         {% endif %}
 
-        <!-- Navegación -->
         <nav class="sidebar-nav">
             <ul>
 
-                <!-- Dashboard -->
                 <li>
                     <a href="{{ url_for('usuario.Dashboard') }}" class="nav-link">
                         <i class="fas fa-chart-line"></i>
@@ -53,25 +45,43 @@
                     </a>
                 </li>
 
-                <!-- Productos -->
                 <li>
-                    <a href="{{ url_for('producto.index') }}" class="nav-link">
+                    <a href="{{ url_for('venta.create') if current_user.rol_name == 'CLIENTE' else url_for('producto.index') }}" 
+                       class="nav-link {{ 'active' if request.endpoint == 'venta.create' or request.endpoint == 'producto.index' }}">
+                        
                         <i class="fas fa-box"></i>
-                        <span>Productos</span>
+                        <span>
+                            {% if current_user.rol_name == 'CLIENTE' %}
+                                Catálogo
+                            {% else %}
+                                Gestión de Productos
+                            {% endif %}
+                        </span>
                     </a>
                 </li>
 
-                <!-- Ventas -->
                 {% if current_user.is_authenticated %}
                 <li>
-                    <a href="{{ url_for('venta.index') }}" class="nav-link">
-                        <i class="fas fa-cash-register"></i>
-                        <span>Ventas</span>
+                    <a href="{{ url_for('venta.index') }}" 
+                       class="nav-link {{ 'active' if request.endpoint in ['venta.index', 'venta.detalle', 'venta.editar'] }}">
+                        
+                        {% if current_user.rol_name == 'CLIENTE' %}
+                            <i class="fas fa-shopping-bag"></i>
+                        {% else %}
+                            <i class="fas fa-cash-register"></i>
+                        {% endif %}
+                        
+                        <span>
+                            {% if current_user.rol_name == 'CLIENTE' %}
+                                Mis Compras
+                            {% else %}
+                                Gestión de Ventas
+                            {% endif %}
+                        </span>
                     </a>
                 </li>
                 {% endif %}
 
-                <!-- Administración -->
                 {% if current_user.is_authenticated and current_user.rol_name == 'ADMINISTRADOR' %}
                 <li class="nav-header">Administración</li>
 
@@ -90,7 +100,6 @@
                 </li>
                 {% endif %}
 
-                <!-- Logout -->
                 <li class="nav-item-bottom">
                     <a href="{{ url_for('usuario.LogoutUsuario') }}"
                        class="nav-link logout">
@@ -103,10 +112,8 @@
         </nav>
     </aside>
 
-    <!-- ===================== CONTENIDO ===================== -->
     <main class="content-wrapper">
 
-        <!-- Flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             <div class="flash-messages">

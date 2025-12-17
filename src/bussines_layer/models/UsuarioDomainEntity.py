@@ -1,78 +1,81 @@
 from datetime import datetime
 
 class UsuarioDomainEntity:
+    # Definimos las variables privadas para que existan desde el inicio
+    def __init__(self):
+        self.__id_usuario = None
+        self.__nombre = ""
+        self.__correo = ""
+        self.__password_hash = ""
+        self.__dni = ""
+        self.__rol_id = None
+        self.__creado_en = None
+        self.__actualizado_en = None
 
-    __id_usuario: str
-    __nombre: str
-    __correo: str
-    __password_hash: str
-    __dni: str
-    __creado_en: float
-    __actualizado_en: float
-    __rol_id: str
-    # NUEVO CAMPO: Para guardar el nombre del rol
-    __rol_nombre: str = "Sin Rol" 
+    # ==========================
+    # GETTERS Y SETTERS
+    # ==========================
 
     @property
-    def id_usuario(self) -> str:
+    def id_usuario(self):
         return self.__id_usuario
-    @id_usuario.setter
-    def id_usuario(self , id_usuario: str) -> None:
-        self.__id_usuario = id_usuario
-
-    @property
-    def nombre(self) -> str:
-        return self.__nombre
-    @nombre.setter
-    def nombre(self , nombre: str) -> None:
-        self.__nombre = nombre
-
-    @property
-    def correo(self) -> str:
-        return self.__correo
-    @correo.setter
-    def correo(self , correo: str) -> None:
-        self.__correo = correo
-
-    @property
-    def password_hash(self) -> str:
-        return self.__password_hash
-    @password_hash.setter
-    def password_hash(self , password_hash: str) -> None:
-        self.__password_hash = password_hash
-
-    @property
-    def dni(self) -> str:
-        return self.__dni
-    @dni.setter
-    def dni(self , dni: str) -> None:
-        self.__dni = dni
-
-    @property
-    def creado_en(self) -> float:
-        return self.__creado_en
-    @creado_en.setter
-    def creado_en(self, creado_en: float) -> None:
-        self.__creado_en = creado_en
-
-    @property
-    def actualizado_en(self) -> float:
-        return self.__actualizado_en
-    @actualizado_en.setter
-    def actualizado_en(self, actualizado_en: float) -> None:
-        self.__actualizado_en = actualizado_en
     
-    @property
-    def rol_id(self) -> str:
-        return self.__rol_id
-    @rol_id.setter
-    def rol_id(self , rol_id: str) -> None:
-        self.__rol_id = rol_id
+    @id_usuario.setter
+    def id_usuario(self, value):
+        self.__id_usuario = value
 
-    # PROPIEDAD NUEVA PARA ACCEDER AL NOMBRE DEL ROL
     @property
-    def rol_nombre(self) -> str:
-        return self.__rol_nombre
-    @rol_nombre.setter
-    def rol_nombre(self, rol_nombre: str) -> None:
-        self.__rol_nombre = rol_nombre
+    def nombre(self):
+        return self.__nombre
+    
+    @nombre.setter
+    def nombre(self, value):
+        self.__nombre = value
+
+    @property
+    def correo(self):
+        return self.__correo
+    
+    @correo.setter
+    def correo(self, value):
+        self.__correo = value
+
+    @property
+    def password_hash(self):
+        return self.__password_hash
+    
+    @password_hash.setter
+    def password_hash(self, value):
+        self.__password_hash = value
+
+    @property
+    def dni(self):
+        return self.__dni
+    
+    @dni.setter
+    def dni(self, value):
+        self.__dni = value
+
+    @property
+    def rol_id(self):
+        return self.__rol_id
+    
+    @rol_id.setter
+    def rol_id(self, value):
+        self.__rol_id = value
+
+    @property
+    def creado_en(self):
+        return self.__creado_en
+    
+    @creado_en.setter
+    def creado_en(self, value):
+        self.__creado_en = value
+
+    @property
+    def actualizado_en(self):
+        return self.__actualizado_en
+    
+    @actualizado_en.setter
+    def actualizado_en(self, value):
+        self.__actualizado_en = value

@@ -22,18 +22,19 @@ usuario_controller = Blueprint('usuario', __name__, template_folder=template_dir
 @login_required
 def LogoutUsuario():
     logout_user()
-    return redirect(url_for("usuario.LoginUsuarioGet"))
+    return redirect(url_for("home.ShowHome"))
 
 @usuario_controller.route("/login")
 def LoginUsuarioGet():
     if current_user.is_authenticated:
-        return redirect(url_for("producto.index"))
+        # CAMBIO: Al Home
+        return redirect(url_for("home.ShowHome"))
     return render_template("module_gestion_usuarios/login.html")
 
 @usuario_controller.post("/login")
 def LoginUsuarioPost():
     if current_user.is_authenticated:
-        return redirect(url_for("producto.index"))
+        return redirect(url_for("home.ShowHome"))
 
     correo = request.form["correo"]
     password = request.form["password"]
@@ -45,7 +46,8 @@ def LoginUsuarioPost():
         flash("Credenciales incorrectas.", "error")
         return redirect(url_for("usuario.LoginUsuarioGet"))
     else:
-        return redirect(url_for("producto.index"))
+        # CAMBIO: Al Home después de loguearse exitosamente
+        return redirect(url_for("home.ShowHome"))
 
 # ==============================================================================
 # PÁGINAS PÚBLICAS
@@ -164,8 +166,9 @@ def RegistrarUsuarioPost():
         usuario_service.RegistrarUsuario(usuario_domain_entity)
         flash("Usuario registrado con éxito", "success")
         
-    except Exception:
-        flash("Error en el registro.", "error")
+    except Exception as e:
+        print(f"❌ ERROR EN REGISTRO DE USUARIO: {e}")
+        flash(f"Error en el registro: {e}", "error") # Opcional: mostrar detalle en web
     
     return redirect(url_for("usuario.VerTodosLosUsuarios"))
 

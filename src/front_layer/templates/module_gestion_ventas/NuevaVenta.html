@@ -1,94 +1,98 @@
 {% extends "module_gestion_productos/base.html" %}
-{% block title %}Nueva Venta - HanbaiApp{% endblock %}
+
+{% block title %}Catálogo de Ventas{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_productos/css/ver_producto.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='module_gestion_ventas/css/nueva_venta.css') }}">
 {% endblock %}
 
 {% block content %}
 
 <div class="page-header">
     <div class="page-header-info">
-        <div class="breadcrumb-text">Ventas</div>
-        <h1 class="page-title">Nueva Venta</h1>
+        <h1 class="page-title">
+            {% if is_edit %}Modificar Pedido{% else %}Catálogo de Productos{% endif %}
+        </h1>
+        <p style="color:#64748b;">Selecciona las cantidades y genera tu compra.</p>
     </div>
-
-    <a href="{{ url_for('venta.index') }}" class="btn-secondary">
-        <i class="fas fa-arrow-left"></i> Volver
-    </a>
 </div>
 
 <form method="POST">
     <div class="table-card">
-
+        
         <div class="toolbar">
-            <span style="font-weight:600; color:#334155;">
-                Selecciona los productos a comprar
-            </span>
+            <span style="font-weight:600; color:#475569;">Lista de Productos Disponibles</span>
         </div>
 
-        <table class="table-custom">
+        <table style="width:100%; border-collapse:separate; border-spacing:0 10px;">
             <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Cantidad</th>
+                <tr style="color:#64748b; text-align:left;">
+                    <th style="padding-bottom:10px;">Producto</th>
+                    <th style="padding-bottom:10px;">Precio</th>
+                    <th style="padding-bottom:10px;">Disponibilidad</th>
+                    <th style="padding-bottom:10px; text-align:center;">Cantidad</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for p in productos %}
                 <tr>
-                    <td>
+                    <td style="border-bottom:1px solid #f1f5f9; padding:10px 0;">
                         <div class="product-name">{{ p.nombre }}</div>
-                        <small style="color:#999">{{ p.descripcion[:50] }}</small>
+                        <div class="product-desc">{{ p.descripcion[:60] }}...</div>
                     </td>
-
-                    <td>
-                        <span class="product-price">
-                            S/. {{ "%.2f"|format(p.precio) }}
-                        </span>
+                    
+                    <td style="border-bottom:1px solid #f1f5f9;">
+                        <div class="product-price">S/. {{ "%.2f"|format(p.precio) }}</div>
                     </td>
+                    
+                    <td style="border-bottom:1px solid #f1f5f9;">
+                        {# Lógica de Stock #}
+                        {% set stock_visual = p.stock %}
+                        {% if is_edit and cantidades_actuales.get(p.id_producto | string) %}
+                            {% set stock_visual = p.stock + cantidades_actuales.get(p.id_producto | string) %}
+                        {% endif %}
 
-                    <td>
-                        {% if p.stock <= 5 %}
-                            <span class="badge badge-danger">Crítico</span>
-                        {% elif p.stock <= 20 %}
-                            <span class="badge badge-warning">Bajo</span>
+                        {% if stock_visual <= 5 %}
+                            <span class="badge-stock stock-low">Últimos ({{ stock_visual }})</span>
+                        {% elif stock_visual <= 20 %}
+                            <span class="badge-stock stock-med">Pocos ({{ stock_visual }})</span>
                         {% else %}
-                            <span class="badge badge-success">Disponible</span>
+                            <span class="badge-stock stock-high">Stock: {{ stock_visual }}</span>
                         {% endif %}
                     </td>
-
-                    <td>
-                        <input
-                            type="number"
-                            name="cantidad_{{ p.id_producto }}"
-                            min="0"
-                            max="{{ p.stock }}"
-                            class="search-input"
-                            style="width:90px;"
-                        >
+                    
+                    <td style="border-bottom:1px solid #f1f5f9; text-align:center;">
+                        <input 
+                            type="number" 
+                            name="cantidad_{{ p.id_producto }}" 
+                            class="input-qty"
+                            min="0" 
+                            max="{{ stock_visual }}"
+                            placeholder="0"
+                            value="{{ cantidades_actuales.get(p.id_producto | string, '') if is_edit else '' }}">
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="4" class="empty-state">
-                        No hay productos disponibles.
+                    <td colspan="4" style="text-align:center; padding:40px; color:#94a3b8;">
+                        No hay productos en el catálogo.
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <div style="display:flex; justify-content:flex-end; margin-top:20px;">
-            <button type="submit" class="btn-primary">
-                <i class="fas fa-check"></i> Confirmar Venta
+        <div class="actions-footer">
+            <a href="{{ url_for('venta.index') }}" class="btn-back">Cancelar</a>
+            <button type="submit" class="btn-confirm">
+                {% if is_edit %}
+                    <i class="fas fa-sync"></i> Actualizar Pedido
+                {% else %}
+                    <i class="fas fa-shopping-cart"></i> Realizar Compra
+                {% endif %}
             </button>
         </div>
 
     </div>
 </form>
-
 {% endblock %}

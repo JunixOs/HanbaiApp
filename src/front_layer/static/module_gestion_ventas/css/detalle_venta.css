@@ -1,0 +1,88 @@
+/* --- ENCABEZADO TIPO RECIBO --- */
+.receipt-header {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.receipt-info-group strong {
+    display: block;
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.receipt-info-group span {
+    font-size: 1.1rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* --- BADGES DE ESTADO (NUEVO) --- */
+.badge-status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-success { background-color: #d1fae5; color: #065f46; } /* Verde */
+.status-warning { background-color: #fef3c7; color: #92400e; } /* Amarillo */
+.status-danger  { background-color: #fee2e2; color: #991b1b; } /* Rojo */
+.status-default { background-color: #f1f5f9; color: #475569; } /* Gris */
+
+/* --- TOTALES --- */
+.total-amount {
+    color: #10b981; /* Verde dinero por defecto */
+    font-size: 1.5rem !important;
+    font-weight: 700;
+}
+
+/* Estilo específico para venta cancelada (tachado y gris) */
+.total-canceled {
+    color: #94a3b8 !important;
+    text-decoration: line-through;
+}
+
+/* --- LISTA DE ITEMS --- */
+.items-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.table-details {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-details th {
+    text-align: left;
+    color: #94a3b8;
+    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.table-details td {
+    padding: 15px 0;
+    border-bottom: 1px solid #f8fafc;
+    color: #334155;
+}
+
+.item-price {
+    text-align: right;
+    font-family: monospace;
+    font-weight: 700;
+}
